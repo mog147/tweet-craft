@@ -32,7 +32,7 @@
       --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.06);
       --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
       --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
-      --header-height: 60px;
+      --header-height: 48px;
       --font-scale: 1.0;
     }
 
@@ -87,54 +87,33 @@
       background: rgba(0, 0, 0, 0.7);
     }
 
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      background: var(--accent);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: calc(18px * var(--font-scale));
-      color: #fff;
-      font-weight: 700;
-      box-shadow: 0 2px 8px var(--accent-glow);
-    }
-
-    .logo h1 {
-      font-size: calc(17px * var(--font-scale));
-      font-weight: 600;
-      letter-spacing: -0.02em;
-    }
-
-    .logo h1 span {
-      color: var(--accent);
-    }
-
-    .logo:hover {
-      opacity: 0.8;
-    }
-
     .logo {
       display: flex;
       align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: opacity 0.2s;
+      gap: 8px;
       justify-self: start;
     }
 
-    .logo:hover {
-      opacity: 0.8;
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--text);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: calc(14px * var(--font-scale));
+      color: var(--bg);
+      font-weight: 700;
     }
 
     .theme-btn {
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       border: none;
-      background: var(--surface-secondary);
-      color: var(--text);
+      background: transparent;
+      color: var(--text-secondary);
       cursor: pointer;
       font-size: 18px;
       display: flex;
@@ -142,37 +121,29 @@
       justify-content: center;
       transition: all .2s;
       justify-self: end;
+      -webkit-tap-highlight-color: transparent;
     }
 
     /* Page Nav (Segmented Control) */
     .page-nav {
       display: flex;
       background: var(--surface-secondary);
-      padding: 3px;
-      border-radius: 10px;
-      position: relative;
+      padding: 2px;
+      border-radius: 8px;
       justify-self: center;
     }
 
-    .theme-btn:hover {
-      background: var(--border);
-      transform: scale(1.05);
-    }
-
     .page-nav a {
-      padding: 6px 16px;
-      border-radius: 8px;
+      padding: 4px 12px;
+      border-radius: 6px;
       font-size: calc(13px * var(--font-scale));
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
       text-decoration: none;
-      color: var(--text-secondary);
-      transition: all .2s cubic-bezier(0.2, 0.8, 0.2, 1);
-      position: relative;
-      z-index: 2;
+      color: var(--text-tertiary);
+      transition: all .2s;
       display: flex;
       align-items: center;
-      gap: 6px;
     }
 
     .page-nav a .material-symbols-outlined {
@@ -182,11 +153,6 @@
     .page-nav a.active {
       color: var(--text);
       background: var(--surface);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    }
-
-    .page-nav a:hover:not(.active) {
-      color: var(--text);
     }
 
     /* Container */
