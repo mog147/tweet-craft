@@ -368,15 +368,15 @@
     /* Buttons */
     .btn-row {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      gap: 8px;
       margin-top: 16px;
     }
 
     .copy-btn {
-      padding: 12px;
+      flex: 1;
+      padding: 10px;
       border-radius: 12px;
-      font-size: calc(14px * var(--font-scale));
+      font-size: calc(13px * var(--font-scale));
       font-weight: 600;
       cursor: pointer;
       border: none;
@@ -384,22 +384,21 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 6px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .copy-btn .material-symbols-outlined {
+      font-size: 18px;
     }
 
     .copy-btn.primary {
       background: var(--accent);
       color: #fff;
-      box-shadow: 0 4px 12px var(--accent-glow);
-    }
-
-    .copy-btn.primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px var(--accent-glow);
     }
 
     .copy-btn.primary:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     .copy-btn.secondary {
@@ -407,14 +406,13 @@
       color: var(--text);
     }
 
-    .copy-btn.secondary:hover {
-      background: var(--border);
+    .copy-btn.secondary:active {
+      transform: scale(0.97);
     }
 
     .copy-btn.copied {
       background: var(--success);
       color: #fff;
-      box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
     }
 
     /* FAB */
@@ -625,7 +623,8 @@
         <span class="char-count ${charCount > 140 ? 'over' : ''}">${charCount}/140</span>
       </div>
       <div class="btn-row">
-        <button class="copy-btn primary" onclick="postTweet(${i})" title="Xで投稿">&#120143; ポストする</button>
+        <button class="copy-btn secondary" id="copy-${i}" onclick="copyTweet(${i},'copy-${i}')"><span class="material-symbols-outlined">content_copy</span> コピー</button>
+        <button class="copy-btn primary" onclick="postTweet(${i})"><span class="material-symbols-outlined">send</span> ポスト</button>
       </div>
     </div>`}).join('') : '<div class="empty">該当するポストがありません</div>';
     }
@@ -653,9 +652,9 @@
       navigator.clipboard.writeText(text).then(() => {
         const btn = document.getElementById(btnId);
         btn.classList.add('copied');
-        btn.innerHTML = '&#10003; コピー完了!';
-        showToast('&#10003; クリップボードにコピーしました');
-        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#128203; コピーする' }, 2000);
+        btn.innerHTML = '<span class="material-symbols-outlined">check</span> コピー完了';
+        showToast('<span class="material-symbols-outlined" style="font-size:16px">check</span> コピーしました');
+        setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> コピー' }, 2000);
       });
     }
 
