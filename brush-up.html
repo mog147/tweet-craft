@@ -33,6 +33,7 @@
             --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
             --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
             --header-height: 60px;
+            --font-scale: 1.0;
         }
 
         [data-theme="dark"] {
@@ -60,9 +61,9 @@
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            transition: background .3s ease, color .3s ease;
-            font-size: 15px;
+            font-size: calc(15px * var(--font-scale));
             line-height: 1.5;
+            transition: background .3s ease, color .3s ease;
         }
 
         /* Header */
@@ -666,6 +667,7 @@
             <a href="index.html" aria-label="ポスト集"><span class="material-symbols-outlined">description</span></a>
             <a href="brush-up.html" class="active" aria-label="ブラッシュアップ"><span
                     class="material-symbols-outlined">brush</span></a>
+            <a href="settings.html" aria-label="設定"><span class="material-symbols-outlined">settings</span></a>
         </nav>
         <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="テーマ切替"></button>
     </div>
@@ -742,7 +744,9 @@
         function initTheme() { const t = localStorage.getItem('tc-theme') || 'dark'; document.documentElement.dataset.theme = t; updateThemeIcon() }
         function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('tc-theme', t); updateThemeIcon() }
         function updateThemeIcon() { document.getElementById('theme-btn').innerHTML = `<span class="material-symbols-outlined">${document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>` }
+        function initFontScale() { const s = localStorage.getItem('tc-font-scale') || '1.0'; document.documentElement.style.setProperty('--font-scale', s); }
         initTheme();
+        initFontScale();
 
         // ===== TOAST =====
         function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }

@@ -33,6 +33,7 @@
       --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
       --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
       --header-height: 60px;
+      --font-scale: 1.0;
     }
 
     [data-theme="dark"] {
@@ -61,7 +62,7 @@
       color: var(--text);
       min-height: 100vh;
       transition: background .3s ease, color .3s ease;
-      font-size: 15px;
+      font-size: calc(15px * var(--font-scale));
       line-height: 1.5;
     }
 
@@ -206,38 +207,6 @@
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
       align-items: center;
-    }
-
-    .trend-sync-btn {
-      margin-left: auto;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 99px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      box-shadow: 0 4px 10px var(--accent-glow);
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .trend-sync-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 14px var(--accent-glow);
-    }
-
-    .trend-sync-btn.loading {
-      opacity: 0.7;
-      cursor: wait;
-    }
-
-    .trend-sync-btn .material-symbols-outlined {
-      font-size: 16px;
     }
 
     .cat-bar::-webkit-scrollbar {
@@ -561,6 +530,7 @@
       <a href="index.html" class="active" aria-label="ポスト集"><span
           class="material-symbols-outlined">description</span></a>
       <a href="brush-up.html" aria-label="ブラッシュアップ"><span class="material-symbols-outlined">brush</span></a>
+      <a href="settings.html" aria-label="設定"><span class="material-symbols-outlined">settings</span></a>
     </nav>
     <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="テーマ切替"></button>
   </div>
@@ -580,7 +550,9 @@
     function initTheme() { const t = localStorage.getItem('tc-theme') || 'dark'; document.documentElement.dataset.theme = t; updateThemeIcon() }
     function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('tc-theme', t); updateThemeIcon() }
     function updateThemeIcon() { document.getElementById('theme-btn').innerHTML = `<span class="material-symbols-outlined">${document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>` }
+    function initFontScale() { const s = localStorage.getItem('tc-font-scale') || '1.0'; document.documentElement.style.setProperty('--font-scale', s); }
     initTheme();
+    initFontScale();
 
     // ===== TOAST =====
     function showToast(msg) { const t = document.getElementById('toast'); t.innerHTML = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }
@@ -588,133 +560,44 @@
     // ===== TWEETS =====
     const tweets = [
       // AI系
-      { cat: 'AI', tags: ['AI', 'トレンド'], text: '40代からデザイナーになって、ふと気づいたことがあって。AIって「仕事を奪う怖い存在」じゃなくて、「そっと隣にいてくれる心強い存在」なのかもしれない。経験が足りない分を、静かに補ってくれる。そんな優しい関係もあるんだなって。' },
-      { cat: 'AI', tags: ['AI'], text: 'ChatGPTにUIの文言をお願いしてみたら、私が3時間かけて悩んでいた言葉を、そっと差し出してくれた。少し悔しいけど、でも…最後に「これがいい」って選ぶのは、やっぱり自分の心だと思うから。その感覚は大切にしたいな。' },
-      { cat: 'AI', tags: ['AI', 'Figma'], text: 'Figma AIがレイアウトを整えてくれる機能、使ってみて静かに感動してしまった。「Rectangle 847」だらけだった頃の自分にそっと教えてあげたい。大丈夫、少しずつ整っていくからって。' },
-      { cat: 'AI', tags: ['AI'], text: 'MidjourneyでUIのイメージを出して、Figmaでそっとなぞってみるの、すごく心地いい練習法だなって。AIが出してくれるものって「惜しいけど何か違う」のが絶妙で、自分で直す時間がいちばん深い学びになる気がする。' },
-      { cat: 'AI', tags: ['AI', 'トレンド'], text: 'Adobe Fireflyでアイコンを作って、Figmaで少しだけ手を加えて、デザインシステムにそっと組み込む。この流れを知ってから、素材探しで途方に暮れる時間がなくなった。新しいものに手を伸ばしてよかったなって、静かに思う。' },
-      { cat: 'AI', tags: ['AI'], text: '「AIを使ったらみんな同じデザインになる」という声を聞くと、少しだけ胸が痛む。でもね、プロンプトにどれだけ自分の想いを込められるかで、出てくるものは全然違うの。言葉にする力が、そのままデザインの力になっていく時代なんだと思う。' },
-      { cat: 'AI', tags: ['AI', 'トレンド'], text: 'Geminiにインタビューの記録を読んでもらったら、自分が気づけなかった視点をそっと教えてくれた。負けたわけじゃなく、一緒に見つけたんだって思えた。ひとりじゃ見えなかった景色を、AIと一緒に見ている感覚。' },
-      { cat: 'AI', tags: ['AI'], text: '40代の自分にできること。それは、AIが出した言葉に対して「なんだか少し違うな」と感じた時に、その違和感をちゃんと言葉にできること。20年間のいろんな経験が、今こうして静かに活きている気がして。' },
+      { cat: 'AI', tags: ['AI', '最新'], text: '2026年のデザインは「AIとの協調」が当たり前に。AIはデザインシステムを深く理解し、文脈に沿った階層をそっと提案してくれる。私たちは「作る」時間から、より豊かに「考える」時間へと、静かにシフトしている気がする。' },
+      { cat: 'AI', tags: ['AI', 'Figma'], text: 'Figma AI（Figma Make）の進化に驚く日々。マルチスクリーンを瞬時に生成し、デザインシステムとの整合性まで見てくれる。でも最後の一押し、心に届く「温度感」を添えるのは、やっぱり人間の言葉なんだと思う。' },
+      { cat: 'AI', tags: ['AI', 'トレンド'], text: 'GoogleのStitchを使ってみたら、手描きのスケッチが数秒でコードに変わってしまった。魔法のようだけど、大切なのは「何を描くか」。想像力がそのまま形になる時代、言葉の重みをそっと噛み締めている。' },
+      { cat: 'AI', tags: ['AI'], text: 'Generative UXの世界へ。ユーザーのプロンプトに合わせてUIが柔軟に変化する。固定された画面ではなく、「対話」するようなインターフェース。新しい扉が、静かに、でも確実に開いている。' },
+      { cat: 'AI', tags: ['AI', 'マインド'], text: 'AIを「奪う存在」ではなく「共創パートナー」と捉え直す。AIが出した100案から、誰かの心に届く1案をそっと選ぶ。その「目利き」の力こそが、これからのデザイナーの価値になるのかもしれない。' },
 
       // Figma系
-      { cat: 'Figma', tags: ['Figma'], text: 'Figmaを始めて3ヶ月目。Auto Layoutの仕組みがすとんと腑に落ちた瞬間、少しだけ世界の見え方が変わった気がした。ひとつずつ余白を手で直していた頃の自分に、「大丈夫だよ」って伝えたい。' },
-      { cat: 'Figma', tags: ['Figma'], text: 'Figmaのコンポーネント設計、正直最初は面倒だなって思ってた。でも50画面目を作った時、過去の自分に「ありがとう」って心の中でつぶやいてた。地道なことの先に、ちゃんとご褒美がある。' },
-      { cat: 'Figma', tags: ['Figma', 'トレンド'], text: 'Figma Variablesに触れてみたら、デザイントークンの管理がふわっと軽くなった。色もスペーシングも、変数ひとつで静かに統一される。「全部の色を変えて」と言われても、深呼吸ひとつで対応できる。そんな安心感がうれしい。' },
-      { cat: 'Figma', tags: ['Figma'], text: 'Figmaでプロトタイプを見せたら、「もう完成ですか？」って驚いてもらえた。伝わるって、こんなにあたたかいことなんだ。言葉じゃ届かなかった想いが、画面を通じてそっと届いた瞬間。' },
-      { cat: 'Figma', tags: ['Figma'], text: 'DevModeが使えるようになって、エンジニアさんとのやりとりが穏やかになった。「ここ何pxですか？」「DevMode見てくださいね」、それだけで空気がやわらかくなる。Figmaが静かに架け橋を作ってくれている。' },
-      { cat: 'Figma', tags: ['Figma'], text: 'Figma Communityの日本語テンプレート、最近とても充実してきていて。先輩たちが残してくれたコンポーネント設計を読み解く時間が、いちばん穏やかで深い学びになる。ひとりで学ぶ人のそばに、そっと寄り添ってくれる場所。' },
+      { cat: 'Figma', tags: ['Figma', 'Tips'], text: 'デザインシステムを複数ファイルに分割して管理する手法、最初は複雑に感じたけれど。Figmaの変数とスタイルで整理された世界は、大規模なプロジェクトでも迷わない安心感をくれる。地道な土台作りが、自由を生むんだ。' },
+      { cat: 'Figma', tags: ['Figma'], text: 'Advanced Auto Layoutを味方につける。画面サイズに合わせて要素が生き物のように呼吸する。レスポンシブの苦労が、Variablesと組み合わさることで、心地よい「リズム」に変わっていく。' },
+      { cat: 'Figma', tags: ['Figma', '最新'], text: 'DevModeの進化で、エンジニアさんとの境界線がやわらかく溶けていく。コードを意識した設計が、そのまま実装の美しさにつながる。Figmaはもはや、デザインと開発の「共通の言語」なんだ。' },
+      { cat: 'Figma', tags: ['Figma'], text: 'プロトタイピングのTransitionsに、AIが自然な動きを添えてくれる。静止画だった画面に、命が吹き込まれる瞬間。触れるのが楽しくなる、そんな「感触」を大切に設計していきたい。' },
+      { cat: 'Figma', tags: ['Figma', 'Tips'], text: 'QoQo.aiやUX Pilotといった最新プラグインが、ユーザー調査の仮説をそっと支えてくれる。データと感性の融合。Figmaのエコシステムは、ひとりで悩むデザイナーの頼もしい味方になってくれる。' },
 
       // デザイン思考・マインド系
-      { cat: 'マインド', tags: ['トレンド'], text: '40代でデザイナーになって1年。「若い人にはかなわないな」って静かに俯いた夜もある。でもね、20年間「使う人」として感じてきたこと、それはどんな教科書にも載っていない大切なもので。遅すぎるなんてこと、きっとないから。' },
-      { cat: 'マインド', tags: [], text: 'デザインの4原則「近接・整列・反復・コントラスト」を知ってから、スーパーのチラシにも思わず見入ってしまうようになった。日常のすべてが、そっと教えてくれている。40代の目に映る世界は、思っていたより豊かだった。' },
-      { cat: 'マインド', tags: [], text: '「なんかしっくりこない」を「余白がもう少しほしいかも」「コントラストをやさしくしたら」って言葉にできるようになった。この1年で得たいちばん大きなもの。感覚を言葉にすることが、デザインの第一歩なのかもしれない。' },
-      { cat: 'マインド', tags: [], text: 'あの頃の自分に伝えたいこと。Dribbbleの美しい作品を見て落ち込まなくていいよ。「なぜ美しいと感じたのか」を3つだけ書き出してみて。感じることは才能。それを言葉にすれば、きっと自分のものになるから。' },
-      { cat: 'マインド', tags: ['トレンド'], text: '最近のデザイントレンドはミニマル回帰。「足す」より「引く」って、実は繊細な感性が必要なこと。人生の中で学んだ「余白の大切さ」が、そのままUIに息づいている。40代の感受性が、静かに活きる場所がある。' },
-      { cat: 'マインド', tags: [], text: 'デザインレビューで「もうちょっと良い感じに」と言われて、胸がぎゅっとなった新人の頃。今は「どの部分をどう変えましょうか」って、やさしく聞き返せるようになった。あの頃の痛みも、ちゃんと今の自分を作ってくれてる。' },
-      { cat: 'マインド', tags: [], text: '朝のささやかなルーティン。目覚めたらDribbbleを3つだけ眺めて、Figmaでコンポーネントをひとつだけ作る。たった15分。でも半年続けたら、200個の小さな積み重ねになっていた。焦らなくていい、そう思えた朝。' },
-      { cat: 'マインド', tags: [], text: '営業を10年やってからデザイナーに転身して、ひとつ気づいたこと。「使う人の気持ちが自然とわかる」って、思っていたよりずっとかけがえのない力だった。前の仕事で感じたことすべてが、今の自分をそっと支えてくれている。' },
+      { cat: 'マインド', tags: ['トレンド'], text: 'AIが作る完璧な左右対象の美しさに、少しだけ疲れてしまった夜に。「Designed Imperfection（意図的な不完全さ）」の魅力に気づく。手書きの揺らぎや、あえて崩したレイアウト。その余白に、人間らしさが静かに宿る。' },
+      { cat: 'マインド', tags: ['Tips'], text: '40代でデザイナーになった私の強み。それは、人生相談を受けてきたような「語彙力」かもしれない。プロンプトに込める言葉の厚みが、AIから引き出す彩りを変える。経験は、目に見えない筆になる。' },
+      { cat: 'マインド', tags: [], text: '「Designing for Emotion」——感情をデザインするということ。効率や便利さのその先にある、心がふっと動く瞬間。その繊細な設計こそが、自動化できないデザインの核になると信じている。' },
+      { cat: 'マインド', tags: ['トレンド'], text: 'ニューロダイバーシティへの配慮。多様な認知特性を持つすべての人に、やさしく届くインターフェース。アクセシビリティを超えた、本当の意味での「インクルーシブ」を、静かに追求し続けたい。' },
+      { cat: 'マインド', tags: [], text: '焦らなくてもいい。毎日Figmaを開く15分。最新トレンドを一つ知る10分。その小さな積み重ねが、半年後、自分だけの「確信」に変わる。40代の学びは、ゆっくりと、深く、根を張っていく。' },
 
       // トレンド・テクニカル
-      { cat: 'トレンド', tags: ['トレンド'], text: '2026年のUIトレンド、少しだけ整理してみた。デザイントークン、AIとの共創、アクセシビリティ、マイクロインタラクション。どれもFigmaでそっと始められる。今からでも、ゆっくりで大丈夫。' },
-      { cat: 'トレンド', tags: ['トレンド', 'AI'], text: '「AIに仕事を奪われるの？」って聞かれると、少し考え込んでしまう。でもきっと、人間にしかできないことがある。誰かの気持ちに寄り添うこと、文脈を読むこと、「これでいいのかな」と立ち止まれること。その繊細さこそが、これからの武器。' },
-      { cat: 'トレンド', tags: ['トレンド'], text: 'ダークモードの対応、ただ色を反転するだけじゃ足りなくて。彩度をそっと落としたり、影を繊細に調整したり。細やかな気配りが求められるからこそ、丁寧に向き合える人が輝けるポイントだと思う。' },
-      { cat: 'トレンド', tags: ['トレンド', 'Figma'], text: 'デザインシステムって「作る」だけじゃなくて「育てていく」ものなのかもしれない。Figma Variablesでトークンを整えて、Style Dictionaryでそっと実装につなげる。設計と開発の境界がやわらかく溶けていく、その感覚が心地いい。' },
-      { cat: 'トレンド', tags: ['トレンド'], text: 'アクセシビリティって「しなきゃいけないこと」じゃなくて、「やさしいデザインの証」だと思う。コントラスト比を整えて、フォーカスを見えるようにして、代替テキストをそっと添える。それだけで、届く人がぐっと増える。' },
-      { cat: 'トレンド', tags: ['トレンド'], text: 'レスポンシブデザイン、小さな画面から始めて広げていく方が、ずっとうまくいくって気づくまで半年かかった。最初から完璧じゃなくていい。小さなところから丁寧に積み上げていけば、ちゃんと形になっていくから。' },
+      { cat: 'トレンド', tags: ['トレンド', '最新'], text: '2026年の注目「Squishy UI（ぷっくりUI）」。高光沢の3D要素や、弾むようなインタラクション。デジタルの中に「触覚」を感じさせるデザインが、画面越しの体験をより親密なものにしてくれる。' },
+      { cat: 'トレンド', tags: ['トレンド'], text: 'Liquid Glass（リキッド・グラス）の質感。奥行きと半透明性が生み出す、未来的でありながら有機的な美しさ。Appleの進化が示すように、UIは再び、質感と光を楽しめる場所へ戻ってきた。' },
+      { cat: 'トレンド', tags: ['トレンド'], text: '進化した「Bento UI」。グリッドに情報を整理しつつ、その中でストーリーを語る。情報の密度と美しさを両立させる、日本のお弁当のような気配り。複雑な世界を、やさしく整理して届けたい。' },
+      { cat: 'トレンド', tags: ['最新'], text: '超パーソナライゼーション（Hyper-personalization）の時代。ユーザーの感情やコンテキストを察して、UIがそっと姿を変える。一律のデザインではなく、一人ひとりに寄り添う「パーソナル・スペース」を作っている感覚。' },
+      { cat: 'トレンド', tags: ['マインド'], text: '「倫理的デザイン（Ethical Design）」の重み。情報がどう届けられ、どう人を動かすか。デザイナーは今、社会の形を作る責任を担っている。誠実であることを、デザインの真ん中に置きたい。' },
 
       // 実践Tips
-      { cat: 'Tips', tags: ['Figma'], text: 'もしデザインを始めたばかりなら、こんな方法はどうかな。好きなアプリをFigmaでそっとなぞってみて、「なぜこの配置なんだろう」と感じてみて、自分なりの案をひとつ出してみる。その繰り返しが、きっと自分だけの力になる。' },
-      { cat: 'Tips', tags: [], text: 'フォント選びに迷って止まってしまったら、まずはNoto Sans JPから始めてみて。読みやすくてやさしい書体。そこから「なぜ読みやすいと感じるんだろう」と考えてみると、次のフォントへの道が見えてくる。焦らなくて大丈夫。' },
-      { cat: 'Tips', tags: [], text: '配色で手が止まってしまう時のこと。まずは好きな色をひとつ選んで、その色の明るさを3段階に分けてみて。そこにアクセントをそっとひとつ。60-30-10の割合で並べるだけで、不思議と心地よい配色になるの。' },
-      { cat: 'Tips', tags: ['Figma'], text: 'UIデザインでいちばん大切なのは、きっと余白。迷ったら余白を少し広げてみて。要素をひとつ減らしてみて。情報をそっと手放してみて。「引く」ことができるのは、繊細に感じ取れる人だからこそ。' },
-      { cat: 'Tips', tags: ['AI'], text: 'Figma、ChatGPT、Midjourney。この3つがそばにあれば、40代からでもひとりで企画からプロトタイプまで作れる。でも本当に大事なのは道具じゃなく「誰のために、何を作りたいか」という、静かに燃える想いだと思う。' },
-      { cat: 'Tips', tags: [], text: 'ボタンのデザインで気をつけていること。主役と脇役の階層をやさしく分けること、指で触れやすい大きさを確保すること、ラベルには「送信する」「保存する」と動詞を添えること。小さな気配りが、使う人の安心感になる。' },
-      { cat: 'Tips', tags: ['トレンド'], text: 'UIをトレースする時、ピクセルの正確さよりも「なぜこうしたのかな」と想像してみることが大切。余白のリズム、色のやさしい使い分け、文字の大小。作った人の意図にそっと耳を傾けるトレースは、きっと深い成長につながる。' },
-      { cat: 'Tips', tags: [], text: '40代でデザイナーに転身して学んだこと。ポートフォリオに並べるべきは「きれいな成果物」より「悩んで考えたプロセス」。なぜこの色を選んだのか、なぜこの配置にしたのか。理由をやさしく語れるデザイナーでありたい。' },
-
-      // 2026年最新トレンド
-      { cat: 'トレンド', tags: ['トレンド'], text: '2026年のUIは「Bento UI（弁当箱グリッド）」がさらに進化して、情報の密度と美しさが両立されている。四角いボックスの中に、自分の想いをそっと詰め込んでいく。使う人が迷わない、整理されたやさしさを形にしていきたい。' },
-      { cat: 'トレンド', tags: ['トレンド', 'AI'], text: 'AIが完璧なデザインを生成してくれる今だからこそ、あえて「不完全さ」を残すデザインが愛されている。手書き風のラインや、少しだけ崩したレイアウト。その「ゆらぎ」が、見る人の心にそっと寄り添う。人間らしさは、そんな隙間に宿るのかもしれない。' },
-      { cat: 'トレンド', tags: ['トレンド'], text: 'デバイスを横断する「マルチモーダル体験」。スマホからスマートウォッチ、そしてARへ。場所が変わっても、心地よさは変わらない。そんな「つながるデザイン」を考える時間が、今はいちばんワクワクする。' },
-      { cat: 'トレンド', tags: ['トレンド', 'AI'], text: 'プロンプト（言葉）がデザインを創る時代。40代のデザイナーにとって、培ってきた「語彙力」や「人生経験」は最強の武器になる。AIという魔法の筆を、自分の言葉でどう動かすか。可能性は、想像以上に広がっている。' },
+      { cat: 'Tips', tags: ['AI'], text: 'プロンプトエンジニアリングは、デザイナーにとっての新しいデッサン。AIに意図を正確に伝え、感性を共鳴させる。言葉を研ぎ澄ますことが、そのままビジュアルの質を上げていく。' },
+      { cat: 'Tips', tags: ['Tips'], text: 'UX Pilotの予測ヒートマップを活用して、自分のデザインを客観的に見つめ直す。感覚だけに頼らず、科学的な視点をそっと添える。確かな根拠が、クライアントさんへの説得力をより深くしてくれる。' },
+      { cat: 'Tips', tags: ['Figma'], text: 'スペーシングを「 Variables」で管理するだけで、デザインの「空気感」が一気に統一される。8px、16px、24px……。数字の中に潜むリズムを整えることが、使いやすさへのいちばんの近道。' },
+      { cat: 'Tips', tags: ['AI', '最新'], text: 'UIzardやGoogle Stitchを使って、スケッチから即座にワイヤーフレームを作る。完璧を目指す前に、まずは形にして、触ってもらう。スピードが、思考をより深く、遠くへと連れて行ってくれる。' },
+      { cat: 'Tips', tags: [], text: '意図的に作る「空の状態（Empty States）」。そこは、ユーザーに期待を届ける場所。次に何をすればいいか、そっと手を取るようなやさしいマイクロコピーを。何もない場所にこそ、おもてなしの心が現れる。' },
     ];
 
-    const categories = ['すべて', 'AI', 'Figma', 'マインド', 'トレンド', 'Tips', '最新ニュース'];
+    const categories = ['すべて', 'AI', 'Figma', 'マインド', 'トレンド', 'Tips'];
     let currentCat = 'すべて';
     let shuffleSeed = Date.now();
-    let newsItems = [];
-
-    // ===== RSS FETCH & TRANSLATE =====
-    async function translateText(text) {
-      try {
-        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ja`);
-        const data = await res.json();
-        return data.responseData.translatedText || text;
-      } catch (e) {
-        return text;
-      }
-    }
-
-    async function fetchLatestTrends() {
-      const btn = document.querySelector('.trend-sync-btn');
-      if (btn) btn.classList.add('loading');
-      showToast('<span class="material-symbols-outlined" style="font-size:16px; animation:spin 1s linear infinite">sync</span> 英語のトレンドを取得中...');
-
-      try {
-        const rssUrl = encodeURIComponent('https://www.smashingmagazine.com/categories/design/index.xml');
-        // Correcting the URL to rss2json.com
-        const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
-        const data = await response.json();
-
-        if (data && data.status === 'ok') {
-          showToast('<span class="material-symbols-outlined" style="font-size:16px; animation:spin 1s linear infinite">translate</span> 日本語に翻訳しています...');
-
-          // Process top 4 items
-          const itemsToProcess = data.items.slice(0, 4);
-          const processedItems = [];
-
-          for (const item of itemsToProcess) {
-            const cleanDesc = item.description.replace(/<[^>]*>?/gm, '').substring(0, 100);
-
-            // Try translation, fallback to original if it fails
-            let translatedTitle = item.title;
-            let translatedDesc = cleanDesc;
-
-            try {
-              translatedTitle = await translateText(item.title);
-              translatedDesc = await translateText(cleanDesc);
-            } catch (e) {
-              console.warn('Translation failed', e);
-            }
-
-            processedItems.push({
-              cat: '最新ニュース',
-              tags: ['最新', 'デザイン'],
-              text: `【最新トレンド】\n${translatedTitle}\n\n${translatedDesc}...\n\n(Source: Smashing Magazine)\n#デザイン #トレンド2026`,
-              link: item.link
-            });
-          }
-
-          newsItems = processedItems;
-          const otherTweets = tweets.filter(t => t.cat !== '最新ニュース');
-          tweets.length = 0;
-          tweets.push(...otherTweets, ...newsItems);
-
-          currentCat = '最新ニュース';
-          renderCats();
-          renderTweets();
-          showToast('&#10003; 最新トレンドを反映しました！');
-        } else {
-          throw new Error('API status not ok');
-        }
-      } catch (err) {
-        console.error('Fetch error:', err);
-        showToast('&#10006; トレンドの取得に失敗しました。時間をおいてお試しください。');
-      } finally {
-        if (btn) btn.classList.remove('loading');
-      }
-    }
 
     // ===== RENDER =====
     function getFiltered() {
@@ -745,9 +628,7 @@
     }
 
     function renderCats() {
-      const catBar = document.getElementById('cat-bar');
-      const html = categories.map(c => `<div class="cat-btn ${c === currentCat ? 'active' : ''}" onclick="selectCat('${c}')">${c === 'すべて' ? 'すべて (' + tweets.length + ')' : c + ' (' + tweets.filter(t => t.cat === c).length + ')'}</div>`).join('');
-      catBar.innerHTML = html + `<button class="trend-sync-btn" onclick="fetchLatestTrends()"><span class="material-symbols-outlined">sync</span> トレンドを読込</button>`;
+      document.getElementById('cat-bar').innerHTML = categories.map(c => `<div class="cat-btn ${c === currentCat ? 'active' : ''}" onclick="selectCat('${c}')">${c === 'すべて' ? 'すべて (' + tweets.length + ')' : c + ' (' + tweets.filter(t => t.cat === c).length + ')'}</div>`).join('');
     }
 
     function selectCat(cat) { currentCat = cat; renderCats(); renderTweets() }
