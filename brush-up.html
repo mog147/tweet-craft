@@ -527,8 +527,8 @@
         }
 
         .btn-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 12px;
         }
 
@@ -899,8 +899,7 @@
             <span class="result-char ${charCount > 140 ? 'over' : ''}">${charCount}/140</span>
           </div>
           <div class="btn-row">
-            <button class="action-btn primary" id="rcopy-${i}" onclick="copyResult(${i}, 'rcopy-${i}')"><span class="material-symbols-outlined">content_copy</span> コピーする</button>
-            <button class="action-btn secondary" onclick="postResult(${i})" title="Xで投稿"><span class="material-symbols-outlined">share</span> ポストする</button>
+            <button class="action-btn primary" onclick="postResult(${i})" title="Xで投稿"><span class="material-symbols-outlined">share</span> ポストする</button>
           </div>
         </div>`;
             }).join('');

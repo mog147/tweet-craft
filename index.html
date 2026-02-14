@@ -205,6 +205,39 @@
       padding: 4px 0 24px;
       scrollbar-width: none;
       -webkit-overflow-scrolling: touch;
+      align-items: center;
+    }
+
+    .trend-sync-btn {
+      margin-left: auto;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 4px 10px var(--accent-glow);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .trend-sync-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px var(--accent-glow);
+    }
+
+    .trend-sync-btn.loading {
+      opacity: 0.7;
+      cursor: wait;
+    }
+
+    .trend-sync-btn .material-symbols-outlined {
+      font-size: 16px;
     }
 
     .cat-bar::-webkit-scrollbar {
@@ -365,8 +398,8 @@
 
     /* Buttons */
     .btn-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: flex;
+      flex-direction: column;
       gap: 12px;
       margin-top: 16px;
     }
@@ -533,7 +566,9 @@
   </div>
 
   <div class="container">
-    <div class="cat-bar" id="cat-bar"></div>
+    <div class="cat-bar" id="cat-bar">
+      <!-- Categories will be rendered here -->
+    </div>
     <div id="tweet-list"></div>
   </div>
 
@@ -597,11 +632,56 @@
       { cat: 'Tips', tags: [], text: 'ボタンのデザインで気をつけていること。主役と脇役の階層をやさしく分けること、指で触れやすい大きさを確保すること、ラベルには「送信する」「保存する」と動詞を添えること。小さな気配りが、使う人の安心感になる。' },
       { cat: 'Tips', tags: ['トレンド'], text: 'UIをトレースする時、ピクセルの正確さよりも「なぜこうしたのかな」と想像してみることが大切。余白のリズム、色のやさしい使い分け、文字の大小。作った人の意図にそっと耳を傾けるトレースは、きっと深い成長につながる。' },
       { cat: 'Tips', tags: [], text: '40代でデザイナーに転身して学んだこと。ポートフォリオに並べるべきは「きれいな成果物」より「悩んで考えたプロセス」。なぜこの色を選んだのか、なぜこの配置にしたのか。理由をやさしく語れるデザイナーでありたい。' },
+
+      // 2026年最新トレンド
+      { cat: 'トレンド', tags: ['トレンド'], text: '2026年のUIは「Bento UI（弁当箱グリッド）」がさらに進化して、情報の密度と美しさが両立されている。四角いボックスの中に、自分の想いをそっと詰め込んでいく。使う人が迷わない、整理されたやさしさを形にしていきたい。' },
+      { cat: 'トレンド', tags: ['トレンド', 'AI'], text: 'AIが完璧なデザインを生成してくれる今だからこそ、あえて「不完全さ」を残すデザインが愛されている。手書き風のラインや、少しだけ崩したレイアウト。その「ゆらぎ」が、見る人の心にそっと寄り添う。人間らしさは、そんな隙間に宿るのかもしれない。' },
+      { cat: 'トレンド', tags: ['トレンド'], text: 'デバイスを横断する「マルチモーダル体験」。スマホからスマートウォッチ、そしてARへ。場所が変わっても、心地よさは変わらない。そんな「つながるデザイン」を考える時間が、今はいちばんワクワクする。' },
+      { cat: 'トレンド', tags: ['トレンド', 'AI'], text: 'プロンプト（言葉）がデザインを創る時代。40代のデザイナーにとって、培ってきた「語彙力」や「人生経験」は最強の武器になる。AIという魔法の筆を、自分の言葉でどう動かすか。可能性は、想像以上に広がっている。' },
     ];
 
-    const categories = ['すべて', 'AI', 'Figma', 'マインド', 'トレンド', 'Tips'];
+    const categories = ['すべて', 'AI', 'Figma', 'マインド', 'トレンド', 'Tips', '最新ニュース'];
     let currentCat = 'すべて';
     let shuffleSeed = Date.now();
+    let newsItems = [];
+
+    // ===== RSS FETCH =====
+    async function fetchLatestTrends() {
+      const btn = document.querySelector('.trend-sync-btn');
+      if (btn) btn.classList.add('loading');
+      showToast('<span class="material-symbols-outlined" style="font-size:16px; animation:spin 1s linear infinite">sync</span> 最新トレンドを取得中...');
+
+      try {
+        // Using rss2json API to fetch Smashing Magazine (Design/UX news)
+        const rssUrl = encodeURIComponent('https://www.smashingmagazine.com/categories/design/index.xml');
+        const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
+        const data = await response.json();
+
+        if (data.status === 'ok') {
+          newsItems = data.items.map(item => ({
+            cat: '最新ニュース',
+            tags: ['最新', 'デザイン'],
+            text: `【最新トレンド】\n${item.title}\n\n${item.description.replace(/<[^>]*>?/gm, '').substring(0, 100)}...\n\n#デザイン #トレンド2026`,
+            link: item.link
+          }));
+
+          // Remove old news and add new ones
+          const otherTweets = tweets.filter(t => t.cat !== '最新ニュース');
+          tweets.length = 0;
+          tweets.push(...otherTweets, ...newsItems);
+
+          currentCat = '最新ニュース';
+          renderCats();
+          renderTweets();
+          showToast('&#10003; トレンドを更新しました！');
+        }
+      } catch (err) {
+        console.error(err);
+        showToast('&#10006; 取得に失敗しました');
+      } finally {
+        if (btn) btn.classList.remove('loading');
+      }
+    }
 
     // ===== RENDER =====
     function getFiltered() {
@@ -626,14 +706,15 @@
         <span class="char-count ${charCount > 140 ? 'over' : ''}">${charCount}/140</span>
       </div>
       <div class="btn-row">
-        <button class="copy-btn primary" id="copy-${i}" onclick="copyTweet(${i},'copy-${i}')">&#128203; コピーする</button>
-        <button class="copy-btn secondary" onclick="postTweet(${i})" title="Xで投稿">&#120143; ポストする</button>
+        <button class="copy-btn primary" onclick="postTweet(${i})" title="Xで投稿">&#120143; ポストする</button>
       </div>
     </div>`}).join('') : '<div class="empty">該当するポストがありません</div>';
     }
 
     function renderCats() {
-      document.getElementById('cat-bar').innerHTML = categories.map(c => `<div class="cat-btn ${c === currentCat ? 'active' : ''}" onclick="selectCat('${c}')">${c === 'すべて' ? 'すべて (' + tweets.length + ')' : c + ' (' + tweets.filter(t => t.cat === c).length + ')'}</div>`).join('');
+      const catBar = document.getElementById('cat-bar');
+      const html = categories.map(c => `<div class="cat-btn ${c === currentCat ? 'active' : ''}" onclick="selectCat('${c}')">${c === 'すべて' ? 'すべて (' + tweets.length + ')' : c + ' (' + tweets.filter(t => t.cat === c).length + ')'}</div>`).join('');
+      catBar.innerHTML = html + `<button class="trend-sync-btn" onclick="fetchLatestTrends()"><span class="material-symbols-outlined">sync</span> トレンドを読込</button>`;
     }
 
     function selectCat(cat) { currentCat = cat; renderCats(); renderTweets() }
