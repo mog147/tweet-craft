@@ -6,529 +6,511 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Tweet Craft - デザイナーのためのポスト生成</title>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <style>
     :root {
-      --accent: #1d9bf0;
-      --accent2: #8ecdf7;
-      --green: #00ba7c;
-      --pink: #f472b6;
-      --purple: #a78bfa;
-      --orange: #fb923c;
-      --red: #f87171;
-      --yellow: #fbbf24;
-      --radius: 16px
+      /* Apple-like System Colors */
+      --bg: #F5F5F7;
+      --surface: #FFFFFF;
+      --surface-secondary: #F2F2F7;
+      --text: #1D1D1F;
+      --text-secondary: #86868B;
+      --text-tertiary: #AEAEB2;
+      --border: rgba(0, 0, 0, 0.05);
+      --accent: #007AFF;
+      --accent-glow: rgba(0, 122, 255, 0.15);
+      --danger: #FF3B30;
+      --success: #34C759;
+      --warning: #FF9500;
+
+      /* Spacing & Layout */
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+      --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+      --header-height: 60px;
     }
 
     [data-theme="dark"] {
-      --bg: #000;
-      --surface: #16181c;
-      --surface2: #1d1f23;
-      --surface3: #2f3336;
-      --border: #2f3336;
-      --text: #e7e9ea;
-      --text2: #71767b;
-      --text3: #536471;
-      --card-shadow: none
-    }
-
-    [data-theme="light"] {
-      --bg: #f7f9f9;
-      --surface: #fff;
-      --surface2: #eff3f4;
-      --surface3: #cfd9de;
-      --border: #eff3f4;
-      --text: #0f1419;
-      --text2: #536471;
-      --text3: #8899a6;
-      --card-shadow: 0 1px 3px rgba(0, 0, 0, .08)
+      --bg: #000000;
+      --surface: #1C1C1E;
+      --surface-secondary: #2C2C2E;
+      --text: #F5F5F7;
+      --text-secondary: #98989D;
+      --text-tertiary: #636366;
+      --border: rgba(255, 255, 255, 0.1);
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+      --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
     }
 
     * {
       margin: 0;
       padding: 0;
-      box-sizing: border-box
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+      font-family: var(--font-main);
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      min-height: 100dvh;
-      transition: background .2s, color .2s
+      transition: background .3s ease, color .3s ease;
+      font-size: 15px;
+      line-height: 1.5;
     }
 
     /* Header */
     .header {
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 16px;
-      display: flex;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.8);
+      height: var(--header-height);
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
-      transition: background .2s;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px)
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s;
     }
 
     [data-theme="dark"] .header {
-      background: rgba(0, 0, 0, .75)
-    }
-
-    [data-theme="light"] .header {
-      background: rgba(247, 249, 249, .85)
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px
+      background: rgba(0, 0, 0, 0.7);
     }
 
     .logo-icon {
       width: 32px;
       height: 32px;
       background: var(--accent);
-      border-radius: 8px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 18px;
       color: #fff;
-      font-weight: 900
+      font-weight: 700;
+      box-shadow: 0 2px 8px var(--accent-glow);
     }
 
     .logo h1 {
       font-size: 17px;
-      font-weight: 800
+      font-weight: 600;
+      letter-spacing: -0.02em;
     }
 
     .logo h1 span {
-      color: var(--accent)
+      color: var(--accent);
     }
 
-    .header-actions {
+    .logo:hover {
+      opacity: 0.8;
+    }
+
+    .logo {
       display: flex;
       align-items: center;
-      gap: 8px
+      gap: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      justify-self: start;
+    }
+
+    .logo:hover {
+      opacity: 0.8;
     }
 
     .theme-btn {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--surface);
+      border: none;
+      background: var(--surface-secondary);
       color: var(--text);
       cursor: pointer;
-      font-size: 16px;
+      font-size: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all .15s;
-      -webkit-tap-highlight-color: transparent
+      transition: all .2s;
+      justify-self: end;
+    }
+
+    /* Page Nav (Segmented Control) */
+    .page-nav {
+      display: flex;
+      background: var(--surface-secondary);
+      padding: 3px;
+      border-radius: 10px;
+      position: relative;
+      justify-self: center;
     }
 
     .theme-btn:hover {
-      background: var(--surface2)
-    }
-
-    /* Page Nav */
-    .page-nav {
-      display: flex;
-      gap: 2px;
-      background: var(--surface2);
-      border-radius: 12px;
-      padding: 3px;
+      background: var(--border);
+      transform: scale(1.05);
     }
 
     .page-nav a {
-      padding: 7px 16px;
-      border-radius: 10px;
+      padding: 6px 16px;
+      border-radius: 8px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      white-space: nowrap;
       text-decoration: none;
-      color: var(--text2);
-      transition: all .15s;
-      -webkit-tap-highlight-color: transparent;
+      color: var(--text-secondary);
+      transition: all .2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-nav a .material-symbols-outlined {
+      font-size: 16px;
     }
 
     .page-nav a.active {
-      background: var(--accent);
-      color: #fff;
+      color: var(--text);
+      background: var(--surface);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .page-nav a:hover:not(.active) {
       color: var(--text);
-      background: var(--surface3);
     }
 
     /* Container */
     .container {
-      max-width: 620px;
+      max-width: 640px;
       margin: 0 auto;
-      padding: 0 12px 100px
+      padding: 0 20px 120px;
     }
 
-    /* Category tabs */
+    /* Category Tabs */
+
+    /* Category Tabs */
     .cat-bar {
       display: flex;
       overflow-x: auto;
-      gap: 6px;
-      padding: 14px 0;
+      gap: 8px;
+      padding: 4px 0 24px;
       scrollbar-width: none;
-      -webkit-overflow-scrolling: touch
+      -webkit-overflow-scrolling: touch;
     }
 
     .cat-bar::-webkit-scrollbar {
-      display: none
+      display: none;
     }
 
     .cat-btn {
-      padding: 8px 16px;
-      border-radius: 99px;
-      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text2);
-      transition: all .12s;
-      -webkit-tap-highlight-color: transparent;
-      flex-shrink: 0
+      background: transparent;
+      color: var(--text-secondary);
+      transition: all .2s;
+      flex-shrink: 0;
     }
 
     .cat-btn.active {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent)
+      background: var(--text);
+      color: var(--bg);
     }
 
     .cat-btn:hover:not(.active) {
-      background: var(--surface2);
-      color: var(--text)
+      background: var(--surface-secondary);
+      color: var(--text);
     }
 
-    /* Tweet card */
+    /* Tweet Cards */
     .tweet-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 12px;
-      transition: all .15s;
-      box-shadow: var(--card-shadow)
+      border-radius: var(--radius-md);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: all .25s ease;
+      border: 1px solid transparent;
+      position: relative;
+      overflow: hidden;
     }
 
     .tweet-card:hover {
-      border-color: var(--surface3)
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
     }
 
     .tweet-top {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px
+      gap: 12px;
+      margin-bottom: 16px;
     }
 
     .tweet-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--accent), var(--purple));
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent), #5E5CE6);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #fff;
       font-weight: 700;
-      font-size: 16px;
-      flex-shrink: 0
+      font-size: 18px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
     .tweet-user {
-      flex: 1
+      flex: 1;
     }
 
     .tweet-name {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 4px
+      color: var(--text);
+      margin-bottom: 2px;
     }
 
     .tweet-handle {
       font-size: 13px;
-      color: var(--text2)
+      color: var(--text-secondary);
     }
 
     .tweet-body {
-      font-size: 15px;
-      line-height: 1.75;
-      margin-bottom: 12px;
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 20px;
       white-space: pre-wrap;
-      word-break: break-all
+      word-break: break-all;
+      color: var(--text);
+      letter-spacing: 0.01em;
     }
 
     .tweet-body .hashtag {
-      color: var(--accent)
+      color: var(--accent);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .tweet-body .hashtag:hover {
+      text-decoration: underline;
     }
 
     .tweet-meta {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
     }
 
     .tweet-tags {
       display: flex;
-      gap: 5px;
+      gap: 6px;
       flex-wrap: wrap;
-      flex: 1
     }
 
     .tweet-tag {
-      padding: 3px 9px;
-      border-radius: 99px;
-      font-size: 10px;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
       font-weight: 600;
-      background: var(--surface2);
-      color: var(--text2);
-      border: 1px solid var(--border)
+      background: var(--surface-secondary);
+      color: var(--text-secondary);
+      transition: all 0.2s;
     }
 
     .tweet-tag.t-ai {
-      background: rgba(29, 155, 240, .1);
       color: var(--accent);
-      border-color: rgba(29, 155, 240, .2)
+      background: rgba(0, 122, 255, 0.08);
     }
 
     .tweet-tag.t-figma {
-      background: rgba(167, 139, 250, .1);
-      color: var(--purple);
-      border-color: rgba(167, 139, 250, .2)
+      color: #BF5AF2;
+      /* Purple */
+      background: rgba(191, 90, 242, 0.08);
     }
 
     .tweet-tag.t-trend {
-      background: rgba(244, 114, 182, .1);
-      color: var(--pink);
-      border-color: rgba(244, 114, 182, .2)
+      color: #FF2D55;
+      /* Pink */
+      background: rgba(255, 45, 85, 0.08);
     }
 
     .char-count {
-      font-size: 11px;
-      color: var(--text3);
-      flex-shrink: 0
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-feature-settings: "tnum";
+      font-weight: 500;
     }
 
     .char-count.over {
-      color: var(--red);
-      font-weight: 700
+      color: var(--danger);
     }
 
     /* Buttons */
     .btn-row {
-      display: flex;
-      gap: 6px;
-      margin-top: 10px
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
     }
 
     .copy-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 700;
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: all .12s;
+      transition: all .2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      -webkit-tap-highlight-color: transparent
+      gap: 8px;
     }
 
     .copy-btn.primary {
       background: var(--accent);
-      color: #fff
+      color: #fff;
+      box-shadow: 0 4px 12px var(--accent-glow);
     }
 
     .copy-btn.primary:hover {
-      opacity: .85
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px var(--accent-glow);
     }
 
     .copy-btn.primary:active {
-      transform: scale(.97)
+      transform: scale(0.98);
     }
 
     .copy-btn.secondary {
-      background: var(--surface2);
+      background: var(--surface-secondary);
       color: var(--text);
-      border: 1px solid var(--border)
     }
 
     .copy-btn.secondary:hover {
-      background: var(--surface3)
+      background: var(--border);
     }
 
     .copy-btn.copied {
-      background: var(--green);
+      background: var(--success);
       color: #fff;
-      border-color: var(--green)
+      box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
     }
 
-    /* Shuffle fab */
+    /* FAB */
     .fab {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 56px;
-      height: 56px;
+      bottom: 32px;
+      right: 32px;
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       background: var(--accent);
       color: #fff;
       border: none;
-      font-size: 24px;
+      font-size: 28px;
       cursor: pointer;
-      box-shadow: 0 4px 16px rgba(29, 155, 240, .35);
-      z-index: 40;
+      box-shadow: var(--shadow-lg);
+      z-index: 90;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all .15s;
-      -webkit-tap-highlight-color: transparent
+      transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     .fab:hover {
-      transform: scale(1.08)
+      transform: scale(1.1) rotate(15deg);
     }
 
     .fab:active {
-      transform: scale(.95)
+      transform: scale(0.95);
     }
 
     /* Toast */
     .toast {
       position: fixed;
-      bottom: 90px;
+      bottom: 40px;
       left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 10px 24px;
-      border-radius: 12px;
-      font-size: 13px;
+      transform: translateX(-50%) translateY(40px);
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 14px;
       font-weight: 600;
-      z-index: 999;
+      z-index: 1000;
       opacity: 0;
-      transition: all .25s;
+      transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       pointer-events: none;
-      white-space: nowrap
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .toast.show {
       opacity: 1;
-      transform: translateX(-50%) translateY(0)
+      transform: translateX(-50%) translateY(0);
     }
 
-    /* Section header */
-    .section-hdr {
-      padding: 16px 0 8px;
-      font-size: 13px;
-      color: var(--text2);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 6px
+    /* Empty State */
+    .empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-tertiary);
+      font-size: 15px;
     }
 
-    .section-hdr .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0
-    }
-
-    /* Stats bar */
-    .stats-bar {
-      display: flex;
-      gap: 8px;
-      padding: 10px 0;
-      overflow-x: auto;
-      scrollbar-width: none
-    }
-
-    .stats-bar::-webkit-scrollbar {
-      display: none
-    }
-
-    .stat-chip {
-      padding: 8px 14px;
-      border-radius: 12px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      font-size: 12px;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-shrink: 0
-    }
-
-    .stat-num {
-      font-weight: 800;
-      font-size: 15px
-    }
-
-    /* Refresh animation */
+    /* Animation */
     @keyframes spin {
-      to {
-        transform: rotate(360deg)
+      100% {
+        transform: rotate(360deg);
       }
     }
 
     .spinning {
-      animation: spin .5s ease
-    }
-
-    /* Empty */
-    .empty {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--text2);
-      font-size: 14px
+      animation: spin 0.6s ease-in-out;
     }
 
     /* Responsive */
     @media(max-width:480px) {
       .container {
-        padding: 0 8px 100px
-      }
-
-      .tweet-body {
-        font-size: 14.5px
-      }
-
-      .fab {
-        bottom: 20px;
-        right: 16px;
-        width: 50px;
-        height: 50px;
-        font-size: 20px
+        padding: 0 16px 100px;
       }
 
       .header {
-        padding: 10px 12px
+        padding: 0 16px;
+      }
+
+      .tweet-card {
+        padding: 20px;
+        border-radius: 20px;
+      }
+
+      .fab {
+        bottom: 24px;
+        right: 24px;
+        width: 56px;
+        height: 56px;
       }
     }
   </style>
@@ -542,32 +524,30 @@
       <div class="logo-icon">X</div>
       <h1><span>Tweet</span> Craft</h1>
     </div>
-    <div class="header-actions">
-      <nav class="page-nav">
-        <a href="index.html" class="active">&#128221; ポスト集</a>
-        <a href="brush-up.html">&#10024; ブラッシュアップ</a>
-      </nav>
-      <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="テーマ切替"></button>
-    </div>
+    <nav class="page-nav">
+      <a href="index.html" class="active"><span class="material-symbols-outlined">description</span> ポスト集</a>
+      <a href="brush-up.html"><span class="material-symbols-outlined">brush</span> ブラッシュアップ</a>
+    </nav>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="テーマ切替"></button>
   </div>
 
   <div class="container">
-    <div class="stats-bar" id="stats-bar"></div>
     <div class="cat-bar" id="cat-bar"></div>
     <div id="tweet-list"></div>
   </div>
 
-  <button class="fab" id="fab" onclick="shuffle()" title="シャッフル">&#8635;</button>
+  <button class="fab" id="fab" onclick="shuffle()" title="シャッフル"><span
+      class="material-symbols-outlined">shuffle</span></button>
 
   <script>
     // ===== THEME =====
     function initTheme() { const t = localStorage.getItem('tc-theme') || 'dark'; document.documentElement.dataset.theme = t; updateThemeIcon() }
     function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('tc-theme', t); updateThemeIcon() }
-    function updateThemeIcon() { document.getElementById('theme-btn').textContent = document.documentElement.dataset.theme === 'dark' ? '&#9728;' : '&#9790;' }
+    function updateThemeIcon() { document.getElementById('theme-btn').innerHTML = `<span class="material-symbols-outlined">${document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>` }
     initTheme();
 
     // ===== TOAST =====
-    function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }
+    function showToast(msg) { const t = document.getElementById('toast'); t.innerHTML = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }
 
     // ===== TWEETS =====
     const tweets = [
@@ -661,17 +641,6 @@
       document.getElementById('cat-bar').innerHTML = categories.map(c => `<div class="cat-btn ${c === currentCat ? 'active' : ''}" onclick="selectCat('${c}')">${c === 'すべて' ? 'すべて (' + tweets.length + ')' : c + ' (' + tweets.filter(t => t.cat === c).length + ')'}</div>`).join('');
     }
 
-    function renderStats() {
-      const ai = tweets.filter(t => t.tags.includes('AI')).length;
-      const figma = tweets.filter(t => t.tags.includes('Figma')).length;
-      const trend = tweets.filter(t => t.tags.includes('トレンド')).length;
-      document.getElementById('stats-bar').innerHTML = `
-    <div class="stat-chip"><span>&#128203;</span> 全 <span class="stat-num">${tweets.length}</span> 件</div>
-    <div class="stat-chip"><span>&#129302;</span> AI <span class="stat-num">${ai}</span></div>
-    <div class="stat-chip"><span>&#9998;</span> Figma <span class="stat-num">${figma}</span></div>
-    <div class="stat-chip"><span>&#128293;</span> トレンド <span class="stat-num">${trend}</span></div>`;
-    }
-
     function selectCat(cat) { currentCat = cat; renderCats(); renderTweets() }
     function shuffle() {
       shuffleSeed = Date.now();
@@ -704,7 +673,7 @@
     }
 
     // ===== INIT =====
-    renderStats(); renderCats(); renderTweets();
+    renderCats(); renderTweets();
   </script>
 </body>
 

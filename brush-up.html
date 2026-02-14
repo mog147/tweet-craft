@@ -6,350 +6,385 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>Tweet Craft - ブラッシュアップ</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
         :root {
-            --accent: #1d9bf0;
-            --accent2: #8ecdf7;
-            --green: #00ba7c;
-            --pink: #f472b6;
-            --purple: #a78bfa;
-            --orange: #fb923c;
-            --red: #f87171;
-            --yellow: #fbbf24;
-            --radius: 16px
+            /* Apple-like System Colors */
+            --bg: #F5F5F7;
+            --surface: #FFFFFF;
+            --surface-secondary: #F2F2F7;
+            --text: #1D1D1F;
+            --text-secondary: #86868B;
+            --text-tertiary: #AEAEB2;
+            --border: rgba(0, 0, 0, 0.05);
+            --accent: #007AFF;
+            --accent-glow: rgba(0, 122, 255, 0.15);
+            --danger: #FF3B30;
+            --success: #34C759;
+            --warning: #FF9500;
+
+            /* Spacing & Layout */
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+            --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+            --header-height: 60px;
         }
 
         [data-theme="dark"] {
-            --bg: #000;
-            --surface: #16181c;
-            --surface2: #1d1f23;
-            --surface3: #2f3336;
-            --border: #2f3336;
-            --text: #e7e9ea;
-            --text2: #71767b;
-            --text3: #536471;
-            --card-shadow: none
-        }
-
-        [data-theme="light"] {
-            --bg: #f7f9f9;
-            --surface: #fff;
-            --surface2: #eff3f4;
-            --surface3: #cfd9de;
-            --border: #eff3f4;
-            --text: #0f1419;
-            --text2: #536471;
-            --text3: #8899a6;
-            --card-shadow: 0 1px 3px rgba(0, 0, 0, .08)
+            --bg: #000000;
+            --surface: #1C1C1E;
+            --surface-secondary: #2C2C2E;
+            --text: #F5F5F7;
+            --text-secondary: #98989D;
+            --text-tertiary: #636366;
+            --border: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
         }
 
         * {
             margin: 0;
             padding: 0;
-            box-sizing: border-box
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            font-family: var(--font-main);
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
-            min-height: 100dvh;
-            transition: background .2s, color .2s
+            transition: background .3s ease, color .3s ease;
+            font-size: 15px;
+            line-height: 1.5;
         }
 
         /* Header */
         .header {
             position: sticky;
             top: 0;
-            z-index: 50;
-            background: var(--bg);
-            border-bottom: 1px solid var(--border);
-            padding: 12px 16px;
-            display: flex;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            height: var(--header-height);
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
             align-items: center;
-            justify-content: space-between;
-            transition: background .2s;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px)
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: background .3s;
         }
 
         [data-theme="dark"] .header {
-            background: rgba(0, 0, 0, .75)
-        }
-
-        [data-theme="light"] .header {
-            background: rgba(247, 249, 249, .85)
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 8px
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .logo-icon {
             width: 32px;
             height: 32px;
             background: var(--accent);
-            border-radius: 8px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
             color: #fff;
-            font-weight: 900
+            font-weight: 700;
+            box-shadow: 0 2px 8px var(--accent-glow);
         }
 
         .logo h1 {
             font-size: 17px;
-            font-weight: 800
+            font-weight: 600;
+            letter-spacing: -0.02em;
         }
 
         .logo h1 span {
-            color: var(--accent)
+            color: var(--accent);
         }
 
-        .header-actions {
+        .logo:hover {
+            opacity: 0.8;
+        }
+
+        .logo {
             display: flex;
             align-items: center;
-            gap: 8px
+            gap: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            justify-self: start;
+        }
+
+        .logo:hover {
+            opacity: 0.8;
         }
 
         .theme-btn {
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            border: 1px solid var(--border);
-            background: var(--surface);
+            border: none;
+            background: var(--surface-secondary);
             color: var(--text);
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all .15s;
-            -webkit-tap-highlight-color: transparent
+            transition: all .2s;
+            justify-self: end;
+        }
+
+        /* Page Nav (Segmented Control) */
+        .page-nav {
+            display: flex;
+            background: var(--surface-secondary);
+            padding: 3px;
+            border-radius: 10px;
+            position: relative;
+            justify-self: center;
         }
 
         .theme-btn:hover {
-            background: var(--surface2)
-        }
-
-        /* Page Nav */
-        .page-nav {
-            display: flex;
-            gap: 2px;
-            background: var(--surface2);
-            border-radius: 12px;
-            padding: 3px;
+            background: var(--border);
+            transform: scale(1.05);
         }
 
         .page-nav a {
-            padding: 7px 16px;
-            border-radius: 10px;
+            padding: 6px 16px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            white-space: nowrap;
             text-decoration: none;
-            color: var(--text2);
-            transition: all .15s;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .page-nav a.active {
-            background: var(--accent);
-            color: #fff;
-        }
-
-        .page-nav a:hover:not(.active) {
-            color: var(--text);
-            background: var(--surface3);
-        }
-
-        /* Container */
-        .container {
-            max-width: 620px;
-            margin: 0 auto;
-            padding: 16px 12px 100px
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 90px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 10px 24px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 600;
-            z-index: 999;
-            opacity: 0;
-            transition: all .25s;
-            pointer-events: none;
-            white-space: nowrap
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0)
-        }
-
-        /* Brush up page styles */
-        .page-title {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .page-desc {
-            font-size: 13px;
-            color: var(--text2);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        /* Input area */
-        .input-section {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: var(--card-shadow);
-        }
-
-        .input-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text2);
-            margin-bottom: 10px;
+            color: var(--text-secondary);
+            transition: all .2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+            z-index: 2;
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
+        .page-nav a .material-symbols-outlined {
+            font-size: 16px;
+        }
+
+        .page-nav a.active {
+            color: var(--text);
+            background: var(--surface);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .page-nav a:hover:not(.active) {
+            color: var(--text);
+        }
+
+        /* Container */
+        .container {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 24px 20px 100px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(40px);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 1000;
+            opacity: 0;
+            transition: all .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Brush up page specific */
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .page-desc {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* Input area */
+        .input-section {
+            background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s;
+        }
+
+        .input-section:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
         .input-area {
             width: 100%;
-            min-height: 120px;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            background: var(--surface2);
+            min-height: 140px;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            border: none;
+            background: var(--surface-secondary);
             color: var(--text);
             font-family: inherit;
-            font-size: 15px;
-            line-height: 1.7;
+            font-size: 16px;
+            line-height: 1.6;
             resize: vertical;
-            transition: border-color .15s;
+            transition: all .2s;
             outline: none;
         }
 
         .input-area::placeholder {
-            color: var(--text3);
+            color: var(--text-tertiary);
         }
 
         .input-area:focus {
-            border-color: var(--accent);
+            background: var(--surface);
+            box-shadow: 0 0 0 2px var(--accent-glow);
         }
 
         .input-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 12px;
         }
 
         .char-info {
             font-size: 12px;
-            color: var(--text3);
+            color: var(--text-tertiary);
+            font-weight: 500;
+            font-feature-settings: "tnum";
         }
 
         .char-info.over {
-            color: var(--red);
-            font-weight: 700;
+            color: var(--danger);
         }
 
         .clear-btn {
             font-size: 12px;
-            color: var(--text3);
+            color: var(--text-secondary);
             background: none;
             border: none;
             cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 6px;
-            transition: all .12s;
+            padding: 6px 12px;
+            border-radius: 99px;
+            transition: all .2s;
+            font-weight: 500;
         }
 
         .clear-btn:hover {
+            background: var(--surface-secondary);
             color: var(--text);
-            background: var(--surface3);
         }
 
         /* Style selection */
         .style-section {
-            margin-bottom: 16px;
+            margin-bottom: 24px;
         }
 
         .style-label {
             font-size: 13px;
-            font-weight: 700;
-            color: var(--text2);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .style-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
 
         .style-card {
             background: var(--surface);
-            border: 2px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 10px;
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            padding: 20px 16px;
             cursor: pointer;
             text-align: center;
-            transition: all .15s;
-            -webkit-tap-highlight-color: transparent;
+            transition: all .2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            position: relative;
         }
 
         .style-card:hover {
-            border-color: var(--surface3);
-            background: var(--surface2);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .style-card.selected {
             border-color: var(--accent);
-            background: rgba(29, 155, 240, .06);
+            background: rgba(0, 122, 255, 0.03);
+            box-shadow: 0 4px 12px var(--accent-glow);
         }
 
         .style-icon {
-            font-size: 24px;
-            margin-bottom: 6px;
+            font-size: 32px;
+            margin-bottom: 12px;
+            transition: transform 0.2s;
+        }
+
+        .style-card:hover .style-icon {
+            transform: scale(1.1);
         }
 
         .style-name {
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
+            color: var(--text);
         }
 
         .style-desc {
-            font-size: 10px;
-            color: var(--text3);
+            font-size: 11px;
+            color: var(--text-secondary);
             line-height: 1.4;
         }
 
@@ -360,46 +395,48 @@
         /* Generate button */
         .generate-btn {
             width: 100%;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 800;
+            padding: 18px;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
             border: none;
             background: var(--accent);
             color: #fff;
-            transition: all .15s;
+            transition: all .2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            margin-bottom: 20px;
-            -webkit-tap-highlight-color: transparent;
+            gap: 10px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 20px var(--accent-glow);
         }
 
         .generate-btn:hover {
-            opacity: .88;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px var(--accent-glow);
         }
 
         .generate-btn:active {
-            transform: scale(.98);
+            transform: scale(0.98);
         }
 
         .generate-btn:disabled {
-            opacity: .4;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         /* Results */
         .results-header {
-            font-size: 13px;
+            font-size: 15px;
             font-weight: 700;
-            color: var(--text2);
-            margin-bottom: 12px;
+            color: var(--text);
+            margin-bottom: 16px;
             display: none;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
         .results-header.visible {
@@ -408,19 +445,24 @@
 
         .result-card {
             background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: var(--card-shadow);
-            transition: all .15s;
-            animation: fadeUp .3s ease;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-sm);
+            transition: all .2s;
+            border: 1px solid transparent;
+            animation: fadeUp .4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .result-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
         }
 
         @keyframes fadeUp {
             from {
                 opacity: 0;
-                transform: translateY(12px);
+                transform: translateY(20px);
             }
 
             to {
@@ -429,194 +471,184 @@
             }
         }
 
-        .result-card:hover {
-            border-color: var(--surface3);
-        }
-
         .result-style-badge {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 4px 10px;
+            gap: 6px;
+            padding: 6px 12px;
             border-radius: 99px;
             font-size: 11px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
         }
 
         .badge-sensible {
-            background: rgba(167, 139, 250, .12);
-            color: var(--purple);
-            border: 1px solid rgba(167, 139, 250, .2);
+            background: rgba(191, 90, 242, 0.08);
+            color: #BF5AF2;
         }
 
         .badge-empathy {
-            background: rgba(244, 114, 182, .12);
-            color: var(--pink);
-            border: 1px solid rgba(244, 114, 182, .2);
+            background: rgba(255, 45, 85, 0.08);
+            color: #FF2D55;
         }
 
         .badge-passion {
-            background: rgba(251, 146, 60, .12);
-            color: var(--orange);
-            border: 1px solid rgba(251, 146, 60, .2);
+            background: rgba(255, 149, 0, 0.08);
+            color: #FF9500;
         }
 
         .result-body {
-            font-size: 15px;
-            line-height: 1.75;
-            margin-bottom: 12px;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 20px;
             white-space: pre-wrap;
             word-break: break-all;
+            color: var(--text);
         }
 
         .result-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            margin-bottom: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
         }
 
         .result-char {
-            font-size: 11px;
-            color: var(--text3);
+            font-size: 12px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            font-feature-settings: "tnum";
         }
 
         .result-char.over {
-            color: var(--red);
-            font-weight: 700;
-        }
-
-        .result-label {
-            font-size: 11px;
-            color: var(--text3);
+            color: var(--danger);
         }
 
         .btn-row {
-            display: flex;
-            gap: 6px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
         .action-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 700;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
             cursor: pointer;
             border: none;
-            transition: all .12s;
+            transition: all .2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            -webkit-tap-highlight-color: transparent;
+            gap: 8px;
         }
 
         .action-btn.primary {
             background: var(--accent);
             color: #fff;
+            box-shadow: 0 4px 12px var(--accent-glow);
         }
 
         .action-btn.primary:hover {
-            opacity: .85;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px var(--accent-glow);
         }
 
         .action-btn.primary:active {
-            transform: scale(.97);
+            transform: scale(0.98);
         }
 
         .action-btn.secondary {
-            background: var(--surface2);
+            background: var(--surface-secondary);
             color: var(--text);
-            border: 1px solid var(--border);
         }
 
         .action-btn.secondary:hover {
-            background: var(--surface3);
+            background: var(--border);
         }
 
         .action-btn.copied {
-            background: var(--green);
+            background: var(--success);
             color: #fff;
-            border-color: var(--green);
+            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
         }
 
         /* Tip card */
         .tip-card {
             background: var(--surface);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-top: 40px;
+            box-shadow: var(--shadow-sm);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-top: 24px;
-            box-shadow: var(--card-shadow);
         }
 
         .tip-title {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: var(--accent);
-            margin-bottom: 8px;
+            margin-bottom: 16px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .tip-list {
             list-style: none;
-            font-size: 13px;
-            color: var(--text2);
+            font-size: 14px;
+            color: var(--text-secondary);
             line-height: 1.8;
         }
 
         .tip-list li {
-            padding-left: 16px;
+            padding-left: 20px;
             position: relative;
+            margin-bottom: 8px;
         }
 
         .tip-list li::before {
-            content: '·';
+            content: '•';
             position: absolute;
-            left: 4px;
-            color: var(--text3);
+            left: 0;
+            color: var(--accent);
             font-weight: 800;
         }
 
         /* Responsive */
         @media(max-width:480px) {
             .container {
-                padding: 12px 8px 100px
+                padding: 16px 16px 100px;
             }
 
             .style-grid {
                 grid-template-columns: 1fr;
-                gap: 6px;
+                gap: 8px;
             }
 
             .style-card {
                 display: flex;
                 align-items: center;
-                gap: 12px;
+                gap: 16px;
                 text-align: left;
-                padding: 12px 14px;
+                padding: 16px;
             }
 
             .style-icon {
-                font-size: 20px;
+                font-size: 24px;
                 margin-bottom: 0;
             }
 
             .header {
-                padding: 10px 12px
+                padding: 10px 16px;
             }
 
             .result-body {
-                font-size: 14.5px;
-            }
-
-            .page-nav a {
-                padding: 6px 10px;
-                font-size: 11px;
+                font-size: 15px;
             }
         }
     </style>
@@ -630,326 +662,334 @@
             <div class="logo-icon">X</div>
             <h1><span>Tweet</span> Craft</h1>
         </div>
-        <div class="header-actions">
-            <nav class="page-nav">
-                <a href="index.html">&#128221; ポスト集</a>
-                <a href="brush-up.html" class="active">&#10024; ブラッシュアップ</a>
-            </nav>
-            <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="テーマ切替"></button>
-        </div>
+        <nav class="page-nav">
+            <a href="index.html"><span class="material-symbols-outlined">description</span> ポスト集</a>
+            <a href="brush-up.html" class="active"><span class="material-symbols-outlined">brush</span> ブラッシュアップ</a>
+        </nav>
+        <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="テーマ切替"></button>
     </div>
 
     <div class="container">
-        <div class="page-title">&#10024; ブラッシュアップ</div>
-        <p class="page-desc">あなたの言葉を、Xで誰かの心にそっと届く表現に整えます。<br>文章を入力して、お好みのスタイルを選んでみてくださいね。</p>
+        <div class="container">
+            <div class="page-title"><span class="material-symbols-outlined">auto_awesome</span> ブラッシュアップ</div>
+            <p class="page-desc">あなたの言葉を、Xで誰かの心にそっと届く表現に整えます。<br>文章を入力して、お好みのスタイルを選んでみてくださいね。</p>
 
-        <!-- Input -->
-        <div class="input-section">
-            <div class="input-label">&#128394;&#65039; あなたの文章</div>
-            <textarea class="input-area" id="input-text"
-                placeholder="ここに、ポストしたい文章を入力してみてください…&#10;&#10;例: デザイン始めて半年。毎日Figma触ってたらコンポーネント作れるようになった。"></textarea>
-            <div class="input-footer">
-                <span class="char-info" id="char-info">0 / 140</span>
-                <button class="clear-btn" onclick="clearInput()">クリア</button>
+            <!-- Input -->
+            <div class="input-section">
+                <div class="input-label"><span class="material-symbols-outlined">edit_note</span> あなたの文章</div>
+                <textarea class="input-area" id="input-text"
+                    placeholder="ここに、ポストしたい文章を入力してみてください…&#10;&#10;例: デザイン始めて半年。毎日Figma触ってたらコンポーネント作れるようになった。"></textarea>
+                <div class="input-footer">
+                    <span class="char-info" id="char-info">0 / 140</span>
+                    <button class="clear-btn" onclick="clearInput()"><span class="material-symbols-outlined"
+                            style="font-size:14px">backspace</span> クリア</button>
+                </div>
+            </div>
+
+            <!-- Style selection -->
+            <div class="style-section">
+                <div class="style-label"><span class="material-symbols-outlined">palette</span> スタイルを選ぶ</div>
+                <div class="style-grid">
+                    <div class="style-card selected" data-style="sensible" onclick="selectStyle('sensible', this)">
+                        <div class="style-icon"><span class="material-symbols-outlined"
+                                style="font-size:32px">spa</span></div>
+                        <div>
+                            <div class="style-name">繊細・内省型</div>
+                            <div class="style-desc">そっと、静かに、心の内側から</div>
+                        </div>
+                    </div>
+                    <div class="style-card" data-style="empathy" onclick="selectStyle('empathy', this)">
+                        <div class="style-icon"><span class="material-symbols-outlined"
+                                style="font-size:32px">volunteer_activism</span></div>
+                        <div>
+                            <div class="style-name">共感・寄り添い型</div>
+                            <div class="style-desc">あなたもそう？一緒にね</div>
+                        </div>
+                    </div>
+                    <div class="style-card" data-style="passion" onclick="selectStyle('passion', this)">
+                        <div class="style-icon"><span class="material-symbols-outlined"
+                                style="font-size:32px">local_fire_department</span></div>
+                        <div>
+                            <div class="style-name">情熱・ストーリー型</div>
+                            <div class="style-desc">あの日、気づいた。変わった。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate button -->
+            <button class="generate-btn" id="generate-btn" onclick="brushUp()"><span
+                    class="material-symbols-outlined">auto_awesome</span> ブラッシュアップする</button>
+
+            <!-- Results -->
+            <div class="results-header" id="results-header"><span class="material-symbols-outlined">mail</span> 変換結果
+            </div>
+            <div id="results-list"></div>
+
+            <!-- Tips -->
+            <div class="tip-card">
+                <div class="tip-title"><span class="material-symbols-outlined">lightbulb</span> 心をつかむポストのコツ</div>
+                <ul class="tip-list">
+                    <li>冒頭の1行で「共感」か「問いかけ」を</li>
+                    <li>断定より「〜かもしれない」で余白を残す</li>
+                    <li>体験を交えると、ぐっと伝わりやすくなります</li>
+                    <li>最後に余韻を残す結びを添えてみて</li>
+                    <li>140文字以内がタイムラインで読みやすいです</li>
+                </ul>
             </div>
         </div>
 
-        <!-- Style selection -->
-        <div class="style-section">
-            <div class="style-label">&#127912; スタイルを選ぶ</div>
-            <div class="style-grid">
-                <div class="style-card selected" data-style="sensible" onclick="selectStyle('sensible', this)">
-                    <div class="style-icon">&#127807;</div>
-                    <div>
-                        <div class="style-name">繊細・内省型</div>
-                        <div class="style-desc">そっと、静かに、心の内側から</div>
-                    </div>
-                </div>
-                <div class="style-card" data-style="empathy" onclick="selectStyle('empathy', this)">
-                    <div class="style-icon">&#128171;</div>
-                    <div>
-                        <div class="style-name">共感・寄り添い型</div>
-                        <div class="style-desc">あなたもそう？一緒にね</div>
-                    </div>
-                </div>
-                <div class="style-card" data-style="passion" onclick="selectStyle('passion', this)">
-                    <div class="style-icon">&#128293;</div>
-                    <div>
-                        <div class="style-name">情熱・ストーリー型</div>
-                        <div class="style-desc">あの日、気づいた。変わった。</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <script>
+            // ===== THEME =====
+            function initTheme() { const t = localStorage.getItem('tc-theme') || 'dark'; document.documentElement.dataset.theme = t; updateThemeIcon() }
+            function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('tc-theme', t); updateThemeIcon() }
+            function updateThemeIcon() { document.getElementById('theme-btn').innerHTML = `<span class="material-symbols-outlined">${document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>` }
+            initTheme();
 
-        <!-- Generate button -->
-        <button class="generate-btn" id="generate-btn" onclick="brushUp()">&#10024; ブラッシュアップする</button>
+            // ===== TOAST =====
+            function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }
 
-        <!-- Results -->
-        <div class="results-header" id="results-header">&#128140; 変換結果</div>
-        <div id="results-list"></div>
+            // ===== INPUT =====
+            const inputEl = document.getElementById('input-text');
+            const charInfoEl = document.getElementById('char-info');
 
-        <!-- Tips -->
-        <div class="tip-card">
-            <div class="tip-title">&#128161; 心をつかむポストのコツ</div>
-            <ul class="tip-list">
-                <li>冒頭の1行で「共感」か「問いかけ」を</li>
-                <li>断定より「〜かもしれない」で余白を残す</li>
-                <li>体験を交えると、ぐっと伝わりやすくなります</li>
-                <li>最後に余韻を残す結びを添えてみて</li>
-                <li>140文字以内がタイムラインで読みやすいです</li>
-            </ul>
-        </div>
-    </div>
+            inputEl.addEventListener('input', updateCharCount);
 
-    <script>
-        // ===== THEME =====
-        function initTheme() { const t = localStorage.getItem('tc-theme') || 'dark'; document.documentElement.dataset.theme = t; updateThemeIcon() }
-        function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('tc-theme', t); updateThemeIcon() }
-        function updateThemeIcon() { document.getElementById('theme-btn').textContent = document.documentElement.dataset.theme === 'dark' ? '☀' : '☾' }
-        initTheme();
-
-        // ===== TOAST =====
-        function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }
-
-        // ===== INPUT =====
-        const inputEl = document.getElementById('input-text');
-        const charInfoEl = document.getElementById('char-info');
-
-        inputEl.addEventListener('input', updateCharCount);
-
-        function updateCharCount() {
-            const len = inputEl.value.length;
-            charInfoEl.textContent = len + ' / 140';
-            charInfoEl.className = 'char-info' + (len > 140 ? ' over' : '');
-        }
-
-        function clearInput() {
-            inputEl.value = '';
-            updateCharCount();
-            inputEl.focus();
-        }
-
-        // ===== STYLE SELECTION =====
-        let currentStyle = 'sensible';
-
-        function selectStyle(style, el) {
-            currentStyle = style;
-            document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-        }
-
-        // ===== BRUSH UP ENGINE =====
-        const transforms = {
-            sensible: {
-                label: '🌿 繊細・内省型',
-                badgeClass: 'badge-sensible',
-                hooks: [
-                    'ふと、思ったこと。',
-                    'ひとりで静かに考えていたこと。',
-                    '言葉にするか迷ったけれど。',
-                    'そっと心に留めていたこと。',
-                    '小さな気づきのこと。',
-                ],
-                endings: [
-                    'そんなふうに、感じている。',
-                    'そう思えた日だった。',
-                    '少しだけ、前に進めた気がする。',
-                    'そんな自分も、悪くないかもしれない。',
-                    '静かに、そう思う。',
-                ],
-                replaces: [
-                    [/すごく|とても|めちゃくちゃ|マジで/g, 'そっと'],
-                    [/気づいた/g, '気づけた気がする'],
-                    [/大事だ|大事です|大切だ/g, '大切なのかもしれない'],
-                    [/わかった/g, '少しだけ、わかった気がする'],
-                    [/できるようになった/g, 'できるようになった…のかもしれない'],
-                    [/思った(?!。)/g, '思えた'],
-                    [/変わった/g, '少しだけ変わった気がする'],
-                    [/最強|最高/g, '心強い'],
-                    [/絶対/g, 'きっと'],
-                    [/しろ|しなさい/g, 'してみて'],
-                    [/べきだ|すべき/g, 'のもいいかもしれない'],
-                    [/！/g, '。'],
-                    [/だ。$/g, 'なのかもしれない。'],
-                ],
-            },
-            empathy: {
-                label: '💫 共感・寄り添い型',
-                badgeClass: 'badge-empathy',
-                hooks: [
-                    'これ、同じように感じてる人いるかな。',
-                    'ひとりじゃないよね、こういう気持ち。',
-                    '同じ道を歩いている人に届いたらいいな。',
-                    'あなたはどうですか？',
-                    'もし同じように悩んでいたら。',
-                ],
-                endings: [
-                    '同じ気持ちの人がいたら、うれしいな。',
-                    'あなたは、ひとりじゃないよ。',
-                    '一緒に、少しずつ。',
-                    'きっと大丈夫。そう信じてる。',
-                    'その気持ち、わかるよ。',
-                ],
-                replaces: [
-                    [/私は|自分は|俺は|僕は/g, '私たちは'],
-                    [/気づいた/g, '気づいたんだよね'],
-                    [/思った/g, '思ったの、私だけかな'],
-                    [/大事だ|大事です/g, '大事だよね'],
-                    [/できるようになった/g, 'できるようになったんだよ'],
-                    [/わかった/g, 'わかった気がするの'],
-                    [/すごく|とても/g, 'ほんとうに'],
-                    [/最強|最高/g, 'かけがえのない'],
-                    [/絶対/g, 'きっと'],
-                    [/しろ|しなさい/g, '一緒にやってみよう'],
-                    [/べきだ|すべき/g, 'のもいいかもね'],
-                ],
-            },
-            passion: {
-                label: '🔥 情熱・ストーリー型',
-                badgeClass: 'badge-passion',
-                hooks: [
-                    'あの日から、何かが変わった。',
-                    '正直に言おう。',
-                    '半年前の自分に伝えたいこと。',
-                    '心が動いた瞬間の話。',
-                    '忘れられない日のこと。',
-                ],
-                endings: [
-                    'あの一歩が、今につながっている。',
-                    'だから、今日も手を動かす。',
-                    'まだ途中。でも、確かに進んでいる。',
-                    '始めた自分を、褒めてあげたい。',
-                    'この道を選んでよかった。',
-                ],
-                replaces: [
-                    [/気づいた/g, '気づいた。はっきりと。'],
-                    [/思った/g, '心の奥で確信した'],
-                    [/大事だ|大事です|大切だ/g, 'いちばん大切なことだった'],
-                    [/できるようになった/g, 'できるようになった。あの頃は想像もしなかった'],
-                    [/わかった/g, '身をもって知った'],
-                    [/すごく|とても/g, '想像以上に'],
-                    [/少し|ちょっと/g, '確実に'],
-                    [/かもしれない/g, 'に違いない'],
-                    [/。$/g, '。これからも。'],
-                ],
-            },
-        };
-
-        function brushUp() {
-            const raw = inputEl.value.trim();
-            if (!raw) {
-                showToast('文章を入力してくださいね');
-                inputEl.focus();
-                return;
+            function updateCharCount() {
+                const len = inputEl.value.length;
+                charInfoEl.textContent = len + ' / 140';
+                charInfoEl.className = 'char-info' + (len > 140 ? ' over' : '');
             }
 
-            const style = transforms[currentStyle];
-            const results = generateVariations(raw, style);
+            function clearInput() {
+                inputEl.value = '';
+                updateCharCount();
+                inputEl.focus();
+            }
 
-            const header = document.getElementById('results-header');
-            header.classList.add('visible');
+            // ===== STYLE SELECTION =====
+            let currentStyle = 'sensible';
 
-            const listEl = document.getElementById('results-list');
-            listEl.innerHTML = results.map((r, i) => {
-                const charCount = r.length;
-                return `<div class="result-card" style="animation-delay:${i * 0.08}s">
-          <span class="result-style-badge ${style.badgeClass}">${style.label} #${i + 1}</span>
+            function selectStyle(style, el) {
+                currentStyle = style;
+                document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+                el.classList.add('selected');
+            }
+
+            // ===== BRUSH UP ENGINE =====
+            const transforms = {
+                sensible: {
+                    label: '繊細・内省型',
+                    icon: 'spa',
+                    badgeClass: 'badge-sensible',
+                    hooks: [
+                        'ふと、思ったこと。',
+                        'ひとりで静かに考えていたこと。',
+                        '言葉にするか迷ったけれど。',
+                        'そっと心に留めていたこと。',
+                        '小さな気づきのこと。',
+                    ],
+                    endings: [
+                        'そんなふうに、感じている。',
+                        'そう思えた日だった。',
+                        '少しだけ、前に進めた気がする。',
+                        'そんな自分も、悪くないかもしれない。',
+                        '静かに、そう思う。',
+                    ],
+                    replaces: [
+                        [/すごく|とても|めちゃくちゃ|マジで/g, 'そっと'],
+                        [/気づいた/g, '気づけた気がする'],
+                        [/大事だ|大事です|大切だ/g, '大切なのかもしれない'],
+                        [/わかった/g, '少しだけ、わかった気がする'],
+                        [/できるようになった/g, 'できるようになった…のかもしれない'],
+                        [/思った(?!。)/g, '思えた'],
+                        [/変わった/g, '少しだけ変わった気がする'],
+                        [/最強|最高/g, '心強い'],
+                        [/絶対/g, 'きっと'],
+                        [/しろ|しなさい/g, 'してみて'],
+                        [/べきだ|すべき/g, 'のもいいかもしれない'],
+                        [/！/g, '。'],
+                        [/だ。$/g, 'なのかもしれない。'],
+                    ],
+                },
+                empathy: {
+                    label: '共感・寄り添い型',
+                    icon: 'volunteer_activism',
+                    badgeClass: 'badge-empathy',
+                    hooks: [
+                        'これ、同じように感じてる人いるかな。',
+                        'ひとりじゃないよね、こういう気持ち。',
+                        '同じ道を歩いている人に届いたらいいな。',
+                        'あなたはどうですか？',
+                        'もし同じように悩んでいたら。',
+                    ],
+                    endings: [
+                        '同じ気持ちの人がいたら、うれしいな。',
+                        'あなたは、ひとりじゃないよ。',
+                        '一緒に、少しずつ。',
+                        'きっと大丈夫。そう信じてる。',
+                        'その気持ち、わかるよ。',
+                    ],
+                    replaces: [
+                        [/私は|自分は|俺は|僕は/g, '私たちは'],
+                        [/気づいた/g, '気づいたんだよね'],
+                        [/思った/g, '思ったの、私だけかな'],
+                        [/大事だ|大事です/g, '大事だよね'],
+                        [/できるようになった/g, 'できるようになったんだよ'],
+                        [/わかった/g, 'わかった気がするの'],
+                        [/すごく|とても/g, 'ほんとうに'],
+                        [/最強|最高/g, 'かけがえのない'],
+                        [/絶対/g, 'きっと'],
+                        [/しろ|しなさい/g, '一緒にやってみよう'],
+                        [/べきだ|すべき/g, 'のもいいかもね'],
+                    ],
+                },
+                passion: {
+                    label: '情熱・ストーリー型',
+                    icon: 'local_fire_department',
+                    badgeClass: 'badge-passion',
+                    hooks: [
+                        'あの日から、何かが変わった。',
+                        '正直に言おう。',
+                        '半年前の自分に伝えたいこと。',
+                        '心が動いた瞬間の話。',
+                        '忘れられない日のこと。',
+                    ],
+                    endings: [
+                        'あの一歩が、今につながっている。',
+                        'だから、今日も手を動かす。',
+                        'まだ途中。でも、確かに進んでいる。',
+                        '始めた自分を、褒めてあげたい。',
+                        'この道を選んでよかった。',
+                    ],
+                    replaces: [
+                        [/気づいた/g, '気づいた。はっきりと。'],
+                        [/思った/g, '心の奥で確信した'],
+                        [/大事だ|大事です|大切だ/g, 'いちばん大切なことだった'],
+                        [/できるようになった/g, 'できるようになった。あの頃は想像もしなかった'],
+                        [/わかった/g, '身をもって知った'],
+                        [/すごく|とても/g, '想像以上に'],
+                        [/少し|ちょっと/g, '確実に'],
+                        [/かもしれない/g, 'に違いない'],
+                        [/。$/g, '。これからも。'],
+                    ],
+                },
+            };
+
+            function brushUp() {
+                const raw = inputEl.value.trim();
+                if (!raw) {
+                    showToast('文章を入力してくださいね');
+                    inputEl.focus();
+                    return;
+                }
+
+                const style = transforms[currentStyle];
+                const results = generateVariations(raw, style);
+
+                const header = document.getElementById('results-header');
+                header.classList.add('visible');
+
+                const listEl = document.getElementById('results-list');
+                listEl.innerHTML = results.map((r, i) => {
+                    const charCount = r.length;
+                    return `<div class="result-card" style="animation-delay:${i * 0.08}s">
+          <span class="result-style-badge ${style.badgeClass}"><span class="material-symbols-outlined" style="font-size:14px">${style.icon}</span>${style.label} #${i + 1}</span>
           <div class="result-body">${escapeHtml(r)}</div>
           <div class="result-meta">
             <span class="result-label">パターン ${i + 1}</span>
             <span class="result-char ${charCount > 140 ? 'over' : ''}">${charCount}/140</span>
           </div>
           <div class="btn-row">
-            <button class="action-btn primary" id="rcopy-${i}" onclick="copyResult(${i}, 'rcopy-${i}')">&#128203; コピーする</button>
-            <button class="action-btn secondary" onclick="postResult(${i})" title="Xで投稿">&#120143; ポストする</button>
+            <button class="action-btn primary" id="rcopy-${i}" onclick="copyResult(${i}, 'rcopy-${i}')"><span class="material-symbols-outlined">content_copy</span> コピーする</button>
+            <button class="action-btn secondary" onclick="postResult(${i})" title="Xで投稿"><span class="material-symbols-outlined">share</span> ポストする</button>
           </div>
         </div>`;
-            }).join('');
+                }).join('');
 
-            // Smooth scroll to results
-            setTimeout(() => header.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-        }
-
-        function generateVariations(text, style) {
-            const variations = [];
-
-            // Variation 1: フック + 変換テキスト
-            const hook1 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
-            let v1 = applyReplaces(text, style.replaces);
-            v1 = hook1 + '\n\n' + v1;
-            if (v1.length > 140) v1 = trimToFit(v1, 140);
-            variations.push(v1);
-
-            // Variation 2: 変換テキスト + 余韻のある結び
-            const ending1 = style.endings[Math.floor(Math.random() * style.endings.length)];
-            let v2 = applyReplaces(text, style.replaces);
-            v2 = v2 + '\n\n' + ending1;
-            if (v2.length > 140) v2 = trimToFit(v2, 140);
-            variations.push(v2);
-
-            // Variation 3: フック + 変換テキスト + 結び（短い場合のみ）
-            let hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
-            let ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
-            // Avoid same hook/ending as v1/v2
-            while (hook2 === hook1) hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
-            while (ending2 === ending1) ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
-            let v3 = applyReplaces(text, style.replaces);
-            v3 = hook2 + '\n\n' + v3 + '\n\n' + ending2;
-            if (v3.length > 140) v3 = trimToFit(v3, 140);
-            variations.push(v3);
-
-            return variations;
-        }
-
-        function applyReplaces(text, replaces) {
-            let result = text;
-            for (const [pattern, replacement] of replaces) {
-                result = result.replace(pattern, replacement);
+                // Smooth scroll to results
+                setTimeout(() => header.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
             }
-            return result;
-        }
 
-        function trimToFit(text, max) {
-            if (text.length <= max) return text;
-            // Try to cut at a sentence boundary
-            let cut = text.substring(0, max - 1);
-            const lastPeriod = cut.lastIndexOf('。');
-            const lastNewline = cut.lastIndexOf('\n');
-            const cutPoint = Math.max(lastPeriod, lastNewline);
-            if (cutPoint > max * 0.5) {
-                return text.substring(0, cutPoint + 1);
+            function generateVariations(text, style) {
+                const variations = [];
+
+                // Variation 1: フック + 変換テキスト
+                const hook1 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+                let v1 = applyReplaces(text, style.replaces);
+                v1 = hook1 + '\n\n' + v1;
+                if (v1.length > 140) v1 = trimToFit(v1, 140);
+                variations.push(v1);
+
+                // Variation 2: 変換テキスト + 余韻のある結び
+                const ending1 = style.endings[Math.floor(Math.random() * style.endings.length)];
+                let v2 = applyReplaces(text, style.replaces);
+                v2 = v2 + '\n\n' + ending1;
+                if (v2.length > 140) v2 = trimToFit(v2, 140);
+                variations.push(v2);
+
+                // Variation 3: フック + 変換テキスト + 結び（短い場合のみ）
+                let hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+                let ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
+                // Avoid same hook/ending as v1/v2
+                while (hook2 === hook1) hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+                while (ending2 === ending1) ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
+                let v3 = applyReplaces(text, style.replaces);
+                v3 = hook2 + '\n\n' + v3 + '\n\n' + ending2;
+                if (v3.length > 140) v3 = trimToFit(v3, 140);
+                variations.push(v3);
+
+                return variations;
             }
-            return cut + '…';
-        }
 
-        function escapeHtml(str) {
-            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
-        }
+            function applyReplaces(text, replaces) {
+                let result = text;
+                for (const [pattern, replacement] of replaces) {
+                    result = result.replace(pattern, replacement);
+                }
+                return result;
+            }
 
-        // ===== RESULTS STORAGE (for copy/post) =====
-        function getResults() {
-            const cards = document.querySelectorAll('.result-body');
-            return Array.from(cards).map(c => c.textContent);
-        }
+            function trimToFit(text, max) {
+                if (text.length <= max) return text;
+                // Try to cut at a sentence boundary
+                let cut = text.substring(0, max - 1);
+                const lastPeriod = cut.lastIndexOf('。');
+                const lastNewline = cut.lastIndexOf('\n');
+                const cutPoint = Math.max(lastPeriod, lastNewline);
+                if (cutPoint > max * 0.5) {
+                    return text.substring(0, cutPoint + 1);
+                }
+                return cut + '…';
+            }
 
-        function copyResult(idx, btnId) {
-            const results = getResults();
-            navigator.clipboard.writeText(results[idx]).then(() => {
-                const btn = document.getElementById(btnId);
-                btn.classList.add('copied');
-                btn.innerHTML = '&#10003; コピー完了!';
-                showToast('✓ クリップボードにコピーしました');
-                setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#128203; コピーする'; }, 2000);
-            });
-        }
+            function escapeHtml(str) {
+                return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+            }
 
-        function postResult(idx) {
-            const results = getResults();
-            const text = encodeURIComponent(results[idx]);
-            window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
-        }
-    </script>
+            // ===== RESULTS STORAGE (for copy/post) =====
+            function getResults() {
+                const cards = document.querySelectorAll('.result-body');
+                return Array.from(cards).map(c => c.textContent);
+            }
+
+            function copyResult(idx, btnId) {
+                const results = getResults();
+                navigator.clipboard.writeText(results[idx]).then(() => {
+                    const btn = document.getElementById(btnId);
+                    btn.classList.add('copied');
+                    btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> コピー完了!';
+                    showToast('✓ クリップボードにコピーしました');
+                    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> コピーする'; }, 2000);
+                });
+            }
+
+            function postResult(idx) {
+                const results = getResults();
+                const text = encodeURIComponent(results[idx]);
+                window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+            }
+        </script>
 </body>
 
 </html>
