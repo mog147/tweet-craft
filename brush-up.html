@@ -671,230 +671,227 @@
     </div>
 
     <div class="container">
-        <div class="container">
-            <div class="page-title"><span class="material-symbols-outlined">auto_awesome</span> ブラッシュアップ</div>
-            <p class="page-desc">あなたの言葉を、Xで誰かの心にそっと届く表現に整えます。<br>文章を入力して、お好みのスタイルを選んでみてくださいね。</p>
 
-            <!-- Input -->
-            <div class="input-section">
-                <div class="input-label"><span class="material-symbols-outlined">edit_note</span> あなたの文章</div>
-                <textarea class="input-area" id="input-text"
-                    placeholder="ここに、ポストしたい文章を入力してみてください…&#10;&#10;例: デザイン始めて半年。毎日Figma触ってたらコンポーネント作れるようになった。"></textarea>
-                <div class="input-footer">
-                    <span class="char-info" id="char-info">0 / 140</span>
-                    <button class="clear-btn" onclick="clearInput()"><span class="material-symbols-outlined"
-                            style="font-size:14px">backspace</span> クリア</button>
-                </div>
-            </div>
 
-            <!-- Style selection -->
-            <div class="style-section">
-                <div class="style-label"><span class="material-symbols-outlined">palette</span> スタイルを選ぶ</div>
-                <div class="style-grid">
-                    <div class="style-card selected" data-style="sensible" onclick="selectStyle('sensible', this)">
-                        <div class="style-icon"><span class="material-symbols-outlined"
-                                style="font-size:32px">spa</span></div>
-                        <div>
-                            <div class="style-name">繊細・内省型</div>
-                            <div class="style-desc">そっと、静かに、心の内側から</div>
-                        </div>
-                    </div>
-                    <div class="style-card" data-style="empathy" onclick="selectStyle('empathy', this)">
-                        <div class="style-icon"><span class="material-symbols-outlined"
-                                style="font-size:32px">volunteer_activism</span></div>
-                        <div>
-                            <div class="style-name">共感・寄り添い型</div>
-                            <div class="style-desc">あなたもそう？一緒にね</div>
-                        </div>
-                    </div>
-                    <div class="style-card" data-style="passion" onclick="selectStyle('passion', this)">
-                        <div class="style-icon"><span class="material-symbols-outlined"
-                                style="font-size:32px">local_fire_department</span></div>
-                        <div>
-                            <div class="style-name">情熱・ストーリー型</div>
-                            <div class="style-desc">あの日、気づいた。変わった。</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Generate button -->
-            <button class="generate-btn" id="generate-btn" onclick="brushUp()"><span
-                    class="material-symbols-outlined">auto_awesome</span> ブラッシュアップする</button>
-
-            <!-- Results -->
-            <div class="results-header" id="results-header"><span class="material-symbols-outlined">mail</span> 変換結果
-            </div>
-            <div id="results-list"></div>
-
-            <!-- Tips -->
-            <div class="tip-card">
-                <div class="tip-title"><span class="material-symbols-outlined">lightbulb</span> 心をつかむポストのコツ</div>
-                <ul class="tip-list">
-                    <li>冒頭の1行で「共感」か「問いかけ」を</li>
-                    <li>断定より「〜かもしれない」で余白を残す</li>
-                    <li>体験を交えると、ぐっと伝わりやすくなります</li>
-                    <li>最後に余韻を残す結びを添えてみて</li>
-                    <li>140文字以内がタイムラインで読みやすいです</li>
-                </ul>
+        <!-- Input -->
+        <div class="input-section">
+            <div class="input-label"><span class="material-symbols-outlined">edit_note</span> あなたの文章</div>
+            <textarea class="input-area" id="input-text"></textarea>
+            <div class="input-footer">
+                <span class="char-info" id="char-info">0 / 140</span>
+                <button class="clear-btn" onclick="clearInput()"><span class="material-symbols-outlined"
+                        style="font-size:14px">backspace</span> クリア</button>
             </div>
         </div>
 
-        <script>
-            // ===== THEME =====
-            function initTheme() { const t = localStorage.getItem('tc-theme') || 'dark'; document.documentElement.dataset.theme = t; updateThemeIcon() }
-            function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('tc-theme', t); updateThemeIcon() }
-            function updateThemeIcon() { document.getElementById('theme-btn').innerHTML = `<span class="material-symbols-outlined">${document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>` }
-            initTheme();
+        <!-- Style selection -->
+        <div class="style-section">
+            <div class="style-label" style="display:none">スタイルを選ぶ</div>
+            <div class="style-grid">
+                <div class="style-card selected" data-style="sensible" onclick="selectStyle('sensible', this)">
+                    <div class="style-icon"><span class="material-symbols-outlined" style="font-size:32px">spa</span>
+                    </div>
+                    <div>
+                        <div class="style-name">繊細・内省型</div>
 
-            // ===== TOAST =====
-            function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }
+                    </div>
+                </div>
+                <div class="style-card" data-style="empathy" onclick="selectStyle('empathy', this)">
+                    <div class="style-icon"><span class="material-symbols-outlined"
+                            style="font-size:32px">volunteer_activism</span></div>
+                    <div>
+                        <div class="style-name">共感・寄り添い型</div>
 
-            // ===== INPUT =====
-            const inputEl = document.getElementById('input-text');
-            const charInfoEl = document.getElementById('char-info');
+                    </div>
+                </div>
+                <div class="style-card" data-style="passion" onclick="selectStyle('passion', this)">
+                    <div class="style-icon"><span class="material-symbols-outlined"
+                            style="font-size:32px">local_fire_department</span></div>
+                    <div>
+                        <div class="style-name">情熱・ストーリー型</div>
 
-            inputEl.addEventListener('input', updateCharCount);
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            function updateCharCount() {
-                const len = inputEl.value.length;
-                charInfoEl.textContent = len + ' / 140';
-                charInfoEl.className = 'char-info' + (len > 140 ? ' over' : '');
-            }
+        <!-- Generate button -->
+        <button class="generate-btn" id="generate-btn" onclick="brushUp()"><span
+                class="material-symbols-outlined">auto_awesome</span> ブラッシュアップする</button>
 
-            function clearInput() {
-                inputEl.value = '';
-                updateCharCount();
+        <!-- Results -->
+        <div class="results-header" id="results-header"><span class="material-symbols-outlined">mail</span> 変換結果
+        </div>
+        <div id="results-list"></div>
+
+        <!-- Tips -->
+        <div class="tip-card">
+            <div class="tip-title"><span class="material-symbols-outlined">lightbulb</span> 心をつかむポストのコツ</div>
+            <ul class="tip-list">
+                <li>冒頭の1行で「共感」か「問いかけ」を</li>
+                <li>断定より「〜かもしれない」で余白を残す</li>
+                <li>体験を交えると、ぐっと伝わりやすくなります</li>
+                <li>最後に余韻を残す結びを添えてみて</li>
+                <li>140文字以内がタイムラインで読みやすいです</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // ===== THEME =====
+        function initTheme() { const t = localStorage.getItem('tc-theme') || 'dark'; document.documentElement.dataset.theme = t; updateThemeIcon() }
+        function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('tc-theme', t); updateThemeIcon() }
+        function updateThemeIcon() { document.getElementById('theme-btn').innerHTML = `<span class="material-symbols-outlined">${document.documentElement.dataset.theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>` }
+        initTheme();
+
+        // ===== TOAST =====
+        function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }
+
+        // ===== INPUT =====
+        const inputEl = document.getElementById('input-text');
+        const charInfoEl = document.getElementById('char-info');
+
+        inputEl.addEventListener('input', updateCharCount);
+
+        function updateCharCount() {
+            const len = inputEl.value.length;
+            charInfoEl.textContent = len + ' / 140';
+            charInfoEl.className = 'char-info' + (len > 140 ? ' over' : '');
+        }
+
+        function clearInput() {
+            inputEl.value = '';
+            updateCharCount();
+            inputEl.focus();
+        }
+
+        // ===== STYLE SELECTION =====
+        let currentStyle = 'sensible';
+
+        function selectStyle(style, el) {
+            currentStyle = style;
+            document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // ===== BRUSH UP ENGINE =====
+        const transforms = {
+            sensible: {
+                label: '繊細・内省型',
+                icon: 'spa',
+                badgeClass: 'badge-sensible',
+                hooks: [
+                    'ふと、思ったこと。',
+                    'ひとりで静かに考えていたこと。',
+                    '言葉にするか迷ったけれど。',
+                    'そっと心に留めていたこと。',
+                    '小さな気づきのこと。',
+                ],
+                endings: [
+                    'そんなふうに、感じている。',
+                    'そう思えた日だった。',
+                    '少しだけ、前に進めた気がする。',
+                    'そんな自分も、悪くないかもしれない。',
+                    '静かに、そう思う。',
+                ],
+                replaces: [
+                    [/すごく|とても|めちゃくちゃ|マジで/g, 'そっと'],
+                    [/気づいた/g, '気づけた気がする'],
+                    [/大事だ|大事です|大切だ/g, '大切なのかもしれない'],
+                    [/わかった/g, '少しだけ、わかった気がする'],
+                    [/できるようになった/g, 'できるようになった…のかもしれない'],
+                    [/思った(?!。)/g, '思えた'],
+                    [/変わった/g, '少しだけ変わった気がする'],
+                    [/最強|最高/g, '心強い'],
+                    [/絶対/g, 'きっと'],
+                    [/しろ|しなさい/g, 'してみて'],
+                    [/べきだ|すべき/g, 'のもいいかもしれない'],
+                    [/！/g, '。'],
+                    [/だ。$/g, 'なのかもしれない。'],
+                ],
+            },
+            empathy: {
+                label: '共感・寄り添い型',
+                icon: 'volunteer_activism',
+                badgeClass: 'badge-empathy',
+                hooks: [
+                    'これ、同じように感じてる人いるかな。',
+                    'ひとりじゃないよね、こういう気持ち。',
+                    '同じ道を歩いている人に届いたらいいな。',
+                    'あなたはどうですか？',
+                    'もし同じように悩んでいたら。',
+                ],
+                endings: [
+                    '同じ気持ちの人がいたら、うれしいな。',
+                    'あなたは、ひとりじゃないよ。',
+                    '一緒に、少しずつ。',
+                    'きっと大丈夫。そう信じてる。',
+                    'その気持ち、わかるよ。',
+                ],
+                replaces: [
+                    [/私は|自分は|俺は|僕は/g, '私たちは'],
+                    [/気づいた/g, '気づいたんだよね'],
+                    [/思った/g, '思ったの、私だけかな'],
+                    [/大事だ|大事です/g, '大事だよね'],
+                    [/できるようになった/g, 'できるようになったんだよ'],
+                    [/わかった/g, 'わかった気がするの'],
+                    [/すごく|とても/g, 'ほんとうに'],
+                    [/最強|最高/g, 'かけがえのない'],
+                    [/絶対/g, 'きっと'],
+                    [/しろ|しなさい/g, '一緒にやってみよう'],
+                    [/べきだ|すべき/g, 'のもいいかもね'],
+                ],
+            },
+            passion: {
+                label: '情熱・ストーリー型',
+                icon: 'local_fire_department',
+                badgeClass: 'badge-passion',
+                hooks: [
+                    'あの日から、何かが変わった。',
+                    '正直に言おう。',
+                    '半年前の自分に伝えたいこと。',
+                    '心が動いた瞬間の話。',
+                    '忘れられない日のこと。',
+                ],
+                endings: [
+                    'あの一歩が、今につながっている。',
+                    'だから、今日も手を動かす。',
+                    'まだ途中。でも、確かに進んでいる。',
+                    '始めた自分を、褒めてあげたい。',
+                    'この道を選んでよかった。',
+                ],
+                replaces: [
+                    [/気づいた/g, '気づいた。はっきりと。'],
+                    [/思った/g, '心の奥で確信した'],
+                    [/大事だ|大事です|大切だ/g, 'いちばん大切なことだった'],
+                    [/できるようになった/g, 'できるようになった。あの頃は想像もしなかった'],
+                    [/わかった/g, '身をもって知った'],
+                    [/すごく|とても/g, '想像以上に'],
+                    [/少し|ちょっと/g, '確実に'],
+                    [/かもしれない/g, 'に違いない'],
+                    [/。$/g, '。これからも。'],
+                ],
+            },
+        };
+
+        function brushUp() {
+            const raw = inputEl.value.trim();
+            if (!raw) {
+                showToast('文章を入力してくださいね');
                 inputEl.focus();
+                return;
             }
 
-            // ===== STYLE SELECTION =====
-            let currentStyle = 'sensible';
+            const style = transforms[currentStyle];
+            const results = generateVariations(raw, style);
 
-            function selectStyle(style, el) {
-                currentStyle = style;
-                document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
-                el.classList.add('selected');
-            }
+            const header = document.getElementById('results-header');
+            header.classList.add('visible');
 
-            // ===== BRUSH UP ENGINE =====
-            const transforms = {
-                sensible: {
-                    label: '繊細・内省型',
-                    icon: 'spa',
-                    badgeClass: 'badge-sensible',
-                    hooks: [
-                        'ふと、思ったこと。',
-                        'ひとりで静かに考えていたこと。',
-                        '言葉にするか迷ったけれど。',
-                        'そっと心に留めていたこと。',
-                        '小さな気づきのこと。',
-                    ],
-                    endings: [
-                        'そんなふうに、感じている。',
-                        'そう思えた日だった。',
-                        '少しだけ、前に進めた気がする。',
-                        'そんな自分も、悪くないかもしれない。',
-                        '静かに、そう思う。',
-                    ],
-                    replaces: [
-                        [/すごく|とても|めちゃくちゃ|マジで/g, 'そっと'],
-                        [/気づいた/g, '気づけた気がする'],
-                        [/大事だ|大事です|大切だ/g, '大切なのかもしれない'],
-                        [/わかった/g, '少しだけ、わかった気がする'],
-                        [/できるようになった/g, 'できるようになった…のかもしれない'],
-                        [/思った(?!。)/g, '思えた'],
-                        [/変わった/g, '少しだけ変わった気がする'],
-                        [/最強|最高/g, '心強い'],
-                        [/絶対/g, 'きっと'],
-                        [/しろ|しなさい/g, 'してみて'],
-                        [/べきだ|すべき/g, 'のもいいかもしれない'],
-                        [/！/g, '。'],
-                        [/だ。$/g, 'なのかもしれない。'],
-                    ],
-                },
-                empathy: {
-                    label: '共感・寄り添い型',
-                    icon: 'volunteer_activism',
-                    badgeClass: 'badge-empathy',
-                    hooks: [
-                        'これ、同じように感じてる人いるかな。',
-                        'ひとりじゃないよね、こういう気持ち。',
-                        '同じ道を歩いている人に届いたらいいな。',
-                        'あなたはどうですか？',
-                        'もし同じように悩んでいたら。',
-                    ],
-                    endings: [
-                        '同じ気持ちの人がいたら、うれしいな。',
-                        'あなたは、ひとりじゃないよ。',
-                        '一緒に、少しずつ。',
-                        'きっと大丈夫。そう信じてる。',
-                        'その気持ち、わかるよ。',
-                    ],
-                    replaces: [
-                        [/私は|自分は|俺は|僕は/g, '私たちは'],
-                        [/気づいた/g, '気づいたんだよね'],
-                        [/思った/g, '思ったの、私だけかな'],
-                        [/大事だ|大事です/g, '大事だよね'],
-                        [/できるようになった/g, 'できるようになったんだよ'],
-                        [/わかった/g, 'わかった気がするの'],
-                        [/すごく|とても/g, 'ほんとうに'],
-                        [/最強|最高/g, 'かけがえのない'],
-                        [/絶対/g, 'きっと'],
-                        [/しろ|しなさい/g, '一緒にやってみよう'],
-                        [/べきだ|すべき/g, 'のもいいかもね'],
-                    ],
-                },
-                passion: {
-                    label: '情熱・ストーリー型',
-                    icon: 'local_fire_department',
-                    badgeClass: 'badge-passion',
-                    hooks: [
-                        'あの日から、何かが変わった。',
-                        '正直に言おう。',
-                        '半年前の自分に伝えたいこと。',
-                        '心が動いた瞬間の話。',
-                        '忘れられない日のこと。',
-                    ],
-                    endings: [
-                        'あの一歩が、今につながっている。',
-                        'だから、今日も手を動かす。',
-                        'まだ途中。でも、確かに進んでいる。',
-                        '始めた自分を、褒めてあげたい。',
-                        'この道を選んでよかった。',
-                    ],
-                    replaces: [
-                        [/気づいた/g, '気づいた。はっきりと。'],
-                        [/思った/g, '心の奥で確信した'],
-                        [/大事だ|大事です|大切だ/g, 'いちばん大切なことだった'],
-                        [/できるようになった/g, 'できるようになった。あの頃は想像もしなかった'],
-                        [/わかった/g, '身をもって知った'],
-                        [/すごく|とても/g, '想像以上に'],
-                        [/少し|ちょっと/g, '確実に'],
-                        [/かもしれない/g, 'に違いない'],
-                        [/。$/g, '。これからも。'],
-                    ],
-                },
-            };
-
-            function brushUp() {
-                const raw = inputEl.value.trim();
-                if (!raw) {
-                    showToast('文章を入力してくださいね');
-                    inputEl.focus();
-                    return;
-                }
-
-                const style = transforms[currentStyle];
-                const results = generateVariations(raw, style);
-
-                const header = document.getElementById('results-header');
-                header.classList.add('visible');
-
-                const listEl = document.getElementById('results-list');
-                listEl.innerHTML = results.map((r, i) => {
-                    const charCount = r.length;
-                    return `<div class="result-card" style="animation-delay:${i * 0.08}s">
+            const listEl = document.getElementById('results-list');
+            listEl.innerHTML = results.map((r, i) => {
+                const charCount = r.length;
+                return `<div class="result-card" style="animation-delay:${i * 0.08}s">
           <span class="result-style-badge ${style.badgeClass}"><span class="material-symbols-outlined" style="font-size:14px">${style.icon}</span>${style.label} #${i + 1}</span>
           <div class="result-body">${escapeHtml(r)}</div>
           <div class="result-meta">
@@ -906,91 +903,91 @@
             <button class="action-btn secondary" onclick="postResult(${i})" title="Xで投稿"><span class="material-symbols-outlined">share</span> ポストする</button>
           </div>
         </div>`;
-                }).join('');
+            }).join('');
 
-                // Smooth scroll to results
-                setTimeout(() => header.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+            // Smooth scroll to results
+            setTimeout(() => header.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        function generateVariations(text, style) {
+            const variations = [];
+
+            // Variation 1: フック + 変換テキスト
+            const hook1 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+            let v1 = applyReplaces(text, style.replaces);
+            v1 = hook1 + '\n\n' + v1;
+            if (v1.length > 140) v1 = trimToFit(v1, 140);
+            variations.push(v1);
+
+            // Variation 2: 変換テキスト + 余韻のある結び
+            const ending1 = style.endings[Math.floor(Math.random() * style.endings.length)];
+            let v2 = applyReplaces(text, style.replaces);
+            v2 = v2 + '\n\n' + ending1;
+            if (v2.length > 140) v2 = trimToFit(v2, 140);
+            variations.push(v2);
+
+            // Variation 3: フック + 変換テキスト + 結び（短い場合のみ）
+            let hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+            let ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
+            // Avoid same hook/ending as v1/v2
+            while (hook2 === hook1) hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+            while (ending2 === ending1) ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
+            let v3 = applyReplaces(text, style.replaces);
+            v3 = hook2 + '\n\n' + v3 + '\n\n' + ending2;
+            if (v3.length > 140) v3 = trimToFit(v3, 140);
+            variations.push(v3);
+
+            return variations;
+        }
+
+        function applyReplaces(text, replaces) {
+            let result = text;
+            for (const [pattern, replacement] of replaces) {
+                result = result.replace(pattern, replacement);
             }
+            return result;
+        }
 
-            function generateVariations(text, style) {
-                const variations = [];
-
-                // Variation 1: フック + 変換テキスト
-                const hook1 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
-                let v1 = applyReplaces(text, style.replaces);
-                v1 = hook1 + '\n\n' + v1;
-                if (v1.length > 140) v1 = trimToFit(v1, 140);
-                variations.push(v1);
-
-                // Variation 2: 変換テキスト + 余韻のある結び
-                const ending1 = style.endings[Math.floor(Math.random() * style.endings.length)];
-                let v2 = applyReplaces(text, style.replaces);
-                v2 = v2 + '\n\n' + ending1;
-                if (v2.length > 140) v2 = trimToFit(v2, 140);
-                variations.push(v2);
-
-                // Variation 3: フック + 変換テキスト + 結び（短い場合のみ）
-                let hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
-                let ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
-                // Avoid same hook/ending as v1/v2
-                while (hook2 === hook1) hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
-                while (ending2 === ending1) ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
-                let v3 = applyReplaces(text, style.replaces);
-                v3 = hook2 + '\n\n' + v3 + '\n\n' + ending2;
-                if (v3.length > 140) v3 = trimToFit(v3, 140);
-                variations.push(v3);
-
-                return variations;
+        function trimToFit(text, max) {
+            if (text.length <= max) return text;
+            // Try to cut at a sentence boundary
+            let cut = text.substring(0, max - 1);
+            const lastPeriod = cut.lastIndexOf('。');
+            const lastNewline = cut.lastIndexOf('\n');
+            const cutPoint = Math.max(lastPeriod, lastNewline);
+            if (cutPoint > max * 0.5) {
+                return text.substring(0, cutPoint + 1);
             }
+            return cut + '…';
+        }
 
-            function applyReplaces(text, replaces) {
-                let result = text;
-                for (const [pattern, replacement] of replaces) {
-                    result = result.replace(pattern, replacement);
-                }
-                return result;
-            }
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+        }
 
-            function trimToFit(text, max) {
-                if (text.length <= max) return text;
-                // Try to cut at a sentence boundary
-                let cut = text.substring(0, max - 1);
-                const lastPeriod = cut.lastIndexOf('。');
-                const lastNewline = cut.lastIndexOf('\n');
-                const cutPoint = Math.max(lastPeriod, lastNewline);
-                if (cutPoint > max * 0.5) {
-                    return text.substring(0, cutPoint + 1);
-                }
-                return cut + '…';
-            }
+        // ===== RESULTS STORAGE (for copy/post) =====
+        function getResults() {
+            const cards = document.querySelectorAll('.result-body');
+            return Array.from(cards).map(c => c.textContent);
+        }
 
-            function escapeHtml(str) {
-                return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
-            }
+        function copyResult(idx, btnId) {
+            const results = getResults();
+            navigator.clipboard.writeText(results[idx]).then(() => {
+                const btn = document.getElementById(btnId);
+                btn.classList.add('copied');
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> コピー完了!';
+                showToast('✓ クリップボードにコピーしました');
+                setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> コピーする'; }, 2000);
+            });
+        }
 
-            // ===== RESULTS STORAGE (for copy/post) =====
-            function getResults() {
-                const cards = document.querySelectorAll('.result-body');
-                return Array.from(cards).map(c => c.textContent);
-            }
-
-            function copyResult(idx, btnId) {
-                const results = getResults();
-                navigator.clipboard.writeText(results[idx]).then(() => {
-                    const btn = document.getElementById(btnId);
-                    btn.classList.add('copied');
-                    btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> コピー完了!';
-                    showToast('✓ クリップボードにコピーしました');
-                    setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '<span class="material-symbols-outlined">content_copy</span> コピーする'; }, 2000);
-                });
-            }
-
-            function postResult(idx) {
-                const results = getResults();
-                const text = encodeURIComponent(results[idx]);
-                window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
-            }
-        </script>
+        function postResult(idx) {
+            const results = getResults();
+            const text = encodeURIComponent(results[idx]);
+            window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+        }
+    </script>
 </body>
 
 </html>

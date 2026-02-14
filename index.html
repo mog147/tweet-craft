@@ -619,13 +619,7 @@
         const charCount = t.text.replace(/#\S+/g, m => 'x'.repeat(Math.min(m.length, 23))).length;
         const bodyHtml = t.text.replace(/#(\S+)/g, '<span class="hashtag">#$1</span>');
         return `<div class="tweet-card">
-      <div class="tweet-top">
-        <div class="tweet-avatar">D</div>
-        <div class="tweet-user">
-          <div class="tweet-name">40代新人デザイナー</div>
-          <div class="tweet-handle">@designer_40s</div>
-        </div>
-      </div>
+
       <div class="tweet-body">${bodyHtml}</div>
       <div class="tweet-meta">
         <div class="tweet-tags">${t.tags.map(tg => { const c = tg === 'AI' ? 't-ai' : tg === 'Figma' ? 't-figma' : tg === 'トレンド' ? 't-trend' : ''; return `<span class="tweet-tag ${c}">${tg}</span>` }).join('')}</div>
