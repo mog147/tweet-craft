@@ -663,33 +663,40 @@
 
       try {
         const rssUrl = encodeURIComponent('https://www.smashingmagazine.com/categories/design/index.xml');
-        const response = await fetch(`https://api.json2rss.com/v1/api.json?rss_url=${rssUrl}`); // Fixed typo in previous step json2rss -> rss2json
-        let data = await response.json();
+        // Correcting the URL to rss2json.com
+        const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
+        const data = await response.json();
 
-        // Fallback for previous step's potential typo if rss2json was intended
-        if (!data || data.status !== 'ok') {
-          const res2 = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
-          data = await res2.json();
-        }
-
-        if (data.status === 'ok') {
+        if (data && data.status === 'ok') {
           showToast('<span class="material-symbols-outlined" style="font-size:16px; animation:spin 1s linear infinite">translate</span> 日本語に翻訳しています...');
 
-          // Translate top 4 items for speed
+          // Process top 4 items
           const itemsToProcess = data.items.slice(0, 4);
-          newsItems = await Promise.all(itemsToProcess.map(async item => {
-            const cleanDesc = item.description.replace(/<[^>]*>?/gm, '').substring(0, 80);
-            const translatedTitle = await translateText(item.title);
-            const translatedDesc = await translateText(cleanDesc);
+          const processedItems = [];
 
-            return {
+          for (const item of itemsToProcess) {
+            const cleanDesc = item.description.replace(/<[^>]*>?/gm, '').substring(0, 100);
+
+            // Try translation, fallback to original if it fails
+            let translatedTitle = item.title;
+            let translatedDesc = cleanDesc;
+
+            try {
+              translatedTitle = await translateText(item.title);
+              translatedDesc = await translateText(cleanDesc);
+            } catch (e) {
+              console.warn('Translation failed', e);
+            }
+
+            processedItems.push({
               cat: '最新ニュース',
-              tags: ['最新', '翻訳'],
-              text: `【最新トレンド・翻訳】\n${translatedTitle}\n\n${translatedDesc}...\n\n(参照：Smashing Magazine)\n#デザイン #トレンド2026`,
+              tags: ['最新', 'デザイン'],
+              text: `【最新トレンド】\n${translatedTitle}\n\n${translatedDesc}...\n\n(Source: Smashing Magazine)\n#デザイン #トレンド2026`,
               link: item.link
-            };
-          }));
+            });
+          }
 
+          newsItems = processedItems;
           const otherTweets = tweets.filter(t => t.cat !== '最新ニュース');
           tweets.length = 0;
           tweets.push(...otherTweets, ...newsItems);
@@ -697,11 +704,13 @@
           currentCat = '最新ニュース';
           renderCats();
           renderTweets();
-          showToast('&#10003; 翻訳されたトレンドを反映しました！');
+          showToast('&#10003; 最新トレンドを反映しました！');
+        } else {
+          throw new Error('API status not ok');
         }
       } catch (err) {
-        console.error(err);
-        showToast('&#10006; 取得または翻訳に失敗しました');
+        console.error('Fetch error:', err);
+        showToast('&#10006; トレンドの取得に失敗しました。時間をおいてお試しください。');
       } finally {
         if (btn) btn.classList.remove('loading');
       }
