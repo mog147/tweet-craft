@@ -265,7 +265,9 @@
         }
 
         slider.addEventListener('input', (e) => {
-            applyFontScale(e.target.value);
+            const scale = e.target.value;
+            applyFontScale(scale);
+            localStorage.setItem('tc-font-scale', scale);
         });
 
         const savedScale = localStorage.getItem('tc-font-scale') || '1.0';
