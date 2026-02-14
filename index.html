@@ -136,6 +136,38 @@
       background: var(--surface2)
     }
 
+    /* Page Nav */
+    .page-nav {
+      display: flex;
+      gap: 2px;
+      background: var(--surface2);
+      border-radius: 12px;
+      padding: 3px;
+    }
+
+    .page-nav a {
+      padding: 7px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      color: var(--text2);
+      transition: all .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .page-nav a.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .page-nav a:hover:not(.active) {
+      color: var(--text);
+      background: var(--surface3);
+    }
+
     /* Container */
     .container {
       max-width: 620px;
@@ -511,6 +543,10 @@
       <h1><span>Tweet</span> Craft</h1>
     </div>
     <div class="header-actions">
+      <nav class="page-nav">
+        <a href="index.html" class="active">&#128221; ポスト集</a>
+        <a href="brush-up.html">&#10024; ブラッシュアップ</a>
+      </nav>
       <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="テーマ切替"></button>
     </div>
   </div>

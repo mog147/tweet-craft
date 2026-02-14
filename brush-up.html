@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Tweet Craft - ブラッシュアップ</title>
+    <style>
+        :root {
+            --accent: #1d9bf0;
+            --accent2: #8ecdf7;
+            --green: #00ba7c;
+            --pink: #f472b6;
+            --purple: #a78bfa;
+            --orange: #fb923c;
+            --red: #f87171;
+            --yellow: #fbbf24;
+            --radius: 16px
+        }
+
+        [data-theme="dark"] {
+            --bg: #000;
+            --surface: #16181c;
+            --surface2: #1d1f23;
+            --surface3: #2f3336;
+            --border: #2f3336;
+            --text: #e7e9ea;
+            --text2: #71767b;
+            --text3: #536471;
+            --card-shadow: none
+        }
+
+        [data-theme="light"] {
+            --bg: #f7f9f9;
+            --surface: #fff;
+            --surface2: #eff3f4;
+            --surface3: #cfd9de;
+            --border: #eff3f4;
+            --text: #0f1419;
+            --text2: #536471;
+            --text3: #8899a6;
+            --card-shadow: 0 1px 3px rgba(0, 0, 0, .08)
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            min-height: 100dvh;
+            transition: background .2s, color .2s
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background .2s;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px)
+        }
+
+        [data-theme="dark"] .header {
+            background: rgba(0, 0, 0, .75)
+        }
+
+        [data-theme="light"] .header {
+            background: rgba(247, 249, 249, .85)
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            font-weight: 900
+        }
+
+        .logo h1 {
+            font-size: 17px;
+            font-weight: 800
+        }
+
+        .logo h1 span {
+            color: var(--accent)
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .theme-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .15s;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        .theme-btn:hover {
+            background: var(--surface2)
+        }
+
+        /* Page Nav */
+        .page-nav {
+            display: flex;
+            gap: 2px;
+            background: var(--surface2);
+            border-radius: 12px;
+            padding: 3px;
+        }
+
+        .page-nav a {
+            padding: 7px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            text-decoration: none;
+            color: var(--text2);
+            transition: all .15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .page-nav a.active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .page-nav a:hover:not(.active) {
+            color: var(--text);
+            background: var(--surface3);
+        }
+
+        /* Container */
+        .container {
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 16px 12px 100px
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            z-index: 999;
+            opacity: 0;
+            transition: all .25s;
+            pointer-events: none;
+            white-space: nowrap
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        /* Brush up page styles */
+        .page-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-desc {
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* Input area */
+        .input-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .input-area {
+            width: 100%;
+            min-height: 120px;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 1.7;
+            resize: vertical;
+            transition: border-color .15s;
+            outline: none;
+        }
+
+        .input-area::placeholder {
+            color: var(--text3);
+        }
+
+        .input-area:focus {
+            border-color: var(--accent);
+        }
+
+        .input-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .char-info {
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .char-info.over {
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        .clear-btn {
+            font-size: 12px;
+            color: var(--text3);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all .12s;
+        }
+
+        .clear-btn:hover {
+            color: var(--text);
+            background: var(--surface3);
+        }
+
+        /* Style selection */
+        .style-section {
+            margin-bottom: 16px;
+        }
+
+        .style-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .style-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+
+        .style-card {
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all .15s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .style-card:hover {
+            border-color: var(--surface3);
+            background: var(--surface2);
+        }
+
+        .style-card.selected {
+            border-color: var(--accent);
+            background: rgba(29, 155, 240, .06);
+        }
+
+        .style-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .style-name {
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .style-desc {
+            font-size: 10px;
+            color: var(--text3);
+            line-height: 1.4;
+        }
+
+        .style-card.selected .style-name {
+            color: var(--accent);
+        }
+
+        /* Generate button */
+        .generate-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            transition: all .15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .generate-btn:hover {
+            opacity: .88;
+        }
+
+        .generate-btn:active {
+            transform: scale(.98);
+        }
+
+        .generate-btn:disabled {
+            opacity: .4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Results */
+        .results-header {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text2);
+            margin-bottom: 12px;
+            display: none;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .results-header.visible {
+            display: flex;
+        }
+
+        .result-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--card-shadow);
+            transition: all .15s;
+            animation: fadeUp .3s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-card:hover {
+            border-color: var(--surface3);
+        }
+
+        .result-style-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .badge-sensible {
+            background: rgba(167, 139, 250, .12);
+            color: var(--purple);
+            border: 1px solid rgba(167, 139, 250, .2);
+        }
+
+        .badge-empathy {
+            background: rgba(244, 114, 182, .12);
+            color: var(--pink);
+            border: 1px solid rgba(244, 114, 182, .2);
+        }
+
+        .badge-passion {
+            background: rgba(251, 146, 60, .12);
+            color: var(--orange);
+            border: 1px solid rgba(251, 146, 60, .2);
+        }
+
+        .result-body {
+            font-size: 15px;
+            line-height: 1.75;
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .result-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .result-char {
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        .result-char.over {
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        .result-label {
+            font-size: 11px;
+            color: var(--text3);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all .12s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .action-btn.primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .action-btn.primary:hover {
+            opacity: .85;
+        }
+
+        .action-btn.primary:active {
+            transform: scale(.97);
+        }
+
+        .action-btn.secondary {
+            background: var(--surface2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .action-btn.secondary:hover {
+            background: var(--surface3);
+        }
+
+        .action-btn.copied {
+            background: var(--green);
+            color: #fff;
+            border-color: var(--green);
+        }
+
+        /* Tip card */
+        .tip-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-top: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .tip-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tip-list {
+            list-style: none;
+            font-size: 13px;
+            color: var(--text2);
+            line-height: 1.8;
+        }
+
+        .tip-list li {
+            padding-left: 16px;
+            position: relative;
+        }
+
+        .tip-list li::before {
+            content: '·';
+            position: absolute;
+            left: 4px;
+            color: var(--text3);
+            font-weight: 800;
+        }
+
+        /* Responsive */
+        @media(max-width:480px) {
+            .container {
+                padding: 12px 8px 100px
+            }
+
+            .style-grid {
+                grid-template-columns: 1fr;
+                gap: 6px;
+            }
+
+            .style-card {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                text-align: left;
+                padding: 12px 14px;
+            }
+
+            .style-icon {
+                font-size: 20px;
+                margin-bottom: 0;
+            }
+
+            .header {
+                padding: 10px 12px
+            }
+
+            .result-body {
+                font-size: 14.5px;
+            }
+
+            .page-nav a {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toast" id="toast"></div>
+
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">X</div>
+            <h1><span>Tweet</span> Craft</h1>
+        </div>
+        <div class="header-actions">
+            <nav class="page-nav">
+                <a href="index.html">&#128221; ポスト集</a>
+                <a href="brush-up.html" class="active">&#10024; ブラッシュアップ</a>
+            </nav>
+            <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="テーマ切替"></button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-title">&#10024; ブラッシュアップ</div>
+        <p class="page-desc">あなたの言葉を、Xで誰かの心にそっと届く表現に整えます。<br>文章を入力して、お好みのスタイルを選んでみてくださいね。</p>
+
+        <!-- Input -->
+        <div class="input-section">
+            <div class="input-label">&#128394;&#65039; あなたの文章</div>
+            <textarea class="input-area" id="input-text"
+                placeholder="ここに、ポストしたい文章を入力してみてください…&#10;&#10;例: デザイン始めて半年。毎日Figma触ってたらコンポーネント作れるようになった。"></textarea>
+            <div class="input-footer">
+                <span class="char-info" id="char-info">0 / 140</span>
+                <button class="clear-btn" onclick="clearInput()">クリア</button>
+            </div>
+        </div>
+
+        <!-- Style selection -->
+        <div class="style-section">
+            <div class="style-label">&#127912; スタイルを選ぶ</div>
+            <div class="style-grid">
+                <div class="style-card selected" data-style="sensible" onclick="selectStyle('sensible', this)">
+                    <div class="style-icon">&#127807;</div>
+                    <div>
+                        <div class="style-name">繊細・内省型</div>
+                        <div class="style-desc">そっと、静かに、心の内側から</div>
+                    </div>
+                </div>
+                <div class="style-card" data-style="empathy" onclick="selectStyle('empathy', this)">
+                    <div class="style-icon">&#128171;</div>
+                    <div>
+                        <div class="style-name">共感・寄り添い型</div>
+                        <div class="style-desc">あなたもそう？一緒にね</div>
+                    </div>
+                </div>
+                <div class="style-card" data-style="passion" onclick="selectStyle('passion', this)">
+                    <div class="style-icon">&#128293;</div>
+                    <div>
+                        <div class="style-name">情熱・ストーリー型</div>
+                        <div class="style-desc">あの日、気づいた。変わった。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate button -->
+        <button class="generate-btn" id="generate-btn" onclick="brushUp()">&#10024; ブラッシュアップする</button>
+
+        <!-- Results -->
+        <div class="results-header" id="results-header">&#128140; 変換結果</div>
+        <div id="results-list"></div>
+
+        <!-- Tips -->
+        <div class="tip-card">
+            <div class="tip-title">&#128161; 心をつかむポストのコツ</div>
+            <ul class="tip-list">
+                <li>冒頭の1行で「共感」か「問いかけ」を</li>
+                <li>断定より「〜かもしれない」で余白を残す</li>
+                <li>体験を交えると、ぐっと伝わりやすくなります</li>
+                <li>最後に余韻を残す結びを添えてみて</li>
+                <li>140文字以内がタイムラインで読みやすいです</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // ===== THEME =====
+        function initTheme() { const t = localStorage.getItem('tc-theme') || 'dark'; document.documentElement.dataset.theme = t; updateThemeIcon() }
+        function toggleTheme() { const t = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = t; localStorage.setItem('tc-theme', t); updateThemeIcon() }
+        function updateThemeIcon() { document.getElementById('theme-btn').textContent = document.documentElement.dataset.theme === 'dark' ? '☀' : '☾' }
+        initTheme();
+
+        // ===== TOAST =====
+        function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1500) }
+
+        // ===== INPUT =====
+        const inputEl = document.getElementById('input-text');
+        const charInfoEl = document.getElementById('char-info');
+
+        inputEl.addEventListener('input', updateCharCount);
+
+        function updateCharCount() {
+            const len = inputEl.value.length;
+            charInfoEl.textContent = len + ' / 140';
+            charInfoEl.className = 'char-info' + (len > 140 ? ' over' : '');
+        }
+
+        function clearInput() {
+            inputEl.value = '';
+            updateCharCount();
+            inputEl.focus();
+        }
+
+        // ===== STYLE SELECTION =====
+        let currentStyle = 'sensible';
+
+        function selectStyle(style, el) {
+            currentStyle = style;
+            document.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        // ===== BRUSH UP ENGINE =====
+        const transforms = {
+            sensible: {
+                label: '🌿 繊細・内省型',
+                badgeClass: 'badge-sensible',
+                hooks: [
+                    'ふと、思ったこと。',
+                    'ひとりで静かに考えていたこと。',
+                    '言葉にするか迷ったけれど。',
+                    'そっと心に留めていたこと。',
+                    '小さな気づきのこと。',
+                ],
+                endings: [
+                    'そんなふうに、感じている。',
+                    'そう思えた日だった。',
+                    '少しだけ、前に進めた気がする。',
+                    'そんな自分も、悪くないかもしれない。',
+                    '静かに、そう思う。',
+                ],
+                replaces: [
+                    [/すごく|とても|めちゃくちゃ|マジで/g, 'そっと'],
+                    [/気づいた/g, '気づけた気がする'],
+                    [/大事だ|大事です|大切だ/g, '大切なのかもしれない'],
+                    [/わかった/g, '少しだけ、わかった気がする'],
+                    [/できるようになった/g, 'できるようになった…のかもしれない'],
+                    [/思った(?!。)/g, '思えた'],
+                    [/変わった/g, '少しだけ変わった気がする'],
+                    [/最強|最高/g, '心強い'],
+                    [/絶対/g, 'きっと'],
+                    [/しろ|しなさい/g, 'してみて'],
+                    [/べきだ|すべき/g, 'のもいいかもしれない'],
+                    [/！/g, '。'],
+                    [/だ。$/g, 'なのかもしれない。'],
+                ],
+            },
+            empathy: {
+                label: '💫 共感・寄り添い型',
+                badgeClass: 'badge-empathy',
+                hooks: [
+                    'これ、同じように感じてる人いるかな。',
+                    'ひとりじゃないよね、こういう気持ち。',
+                    '同じ道を歩いている人に届いたらいいな。',
+                    'あなたはどうですか？',
+                    'もし同じように悩んでいたら。',
+                ],
+                endings: [
+                    '同じ気持ちの人がいたら、うれしいな。',
+                    'あなたは、ひとりじゃないよ。',
+                    '一緒に、少しずつ。',
+                    'きっと大丈夫。そう信じてる。',
+                    'その気持ち、わかるよ。',
+                ],
+                replaces: [
+                    [/私は|自分は|俺は|僕は/g, '私たちは'],
+                    [/気づいた/g, '気づいたんだよね'],
+                    [/思った/g, '思ったの、私だけかな'],
+                    [/大事だ|大事です/g, '大事だよね'],
+                    [/できるようになった/g, 'できるようになったんだよ'],
+                    [/わかった/g, 'わかった気がするの'],
+                    [/すごく|とても/g, 'ほんとうに'],
+                    [/最強|最高/g, 'かけがえのない'],
+                    [/絶対/g, 'きっと'],
+                    [/しろ|しなさい/g, '一緒にやってみよう'],
+                    [/べきだ|すべき/g, 'のもいいかもね'],
+                ],
+            },
+            passion: {
+                label: '🔥 情熱・ストーリー型',
+                badgeClass: 'badge-passion',
+                hooks: [
+                    'あの日から、何かが変わった。',
+                    '正直に言おう。',
+                    '半年前の自分に伝えたいこと。',
+                    '心が動いた瞬間の話。',
+                    '忘れられない日のこと。',
+                ],
+                endings: [
+                    'あの一歩が、今につながっている。',
+                    'だから、今日も手を動かす。',
+                    'まだ途中。でも、確かに進んでいる。',
+                    '始めた自分を、褒めてあげたい。',
+                    'この道を選んでよかった。',
+                ],
+                replaces: [
+                    [/気づいた/g, '気づいた。はっきりと。'],
+                    [/思った/g, '心の奥で確信した'],
+                    [/大事だ|大事です|大切だ/g, 'いちばん大切なことだった'],
+                    [/できるようになった/g, 'できるようになった。あの頃は想像もしなかった'],
+                    [/わかった/g, '身をもって知った'],
+                    [/すごく|とても/g, '想像以上に'],
+                    [/少し|ちょっと/g, '確実に'],
+                    [/かもしれない/g, 'に違いない'],
+                    [/。$/g, '。これからも。'],
+                ],
+            },
+        };
+
+        function brushUp() {
+            const raw = inputEl.value.trim();
+            if (!raw) {
+                showToast('文章を入力してくださいね');
+                inputEl.focus();
+                return;
+            }
+
+            const style = transforms[currentStyle];
+            const results = generateVariations(raw, style);
+
+            const header = document.getElementById('results-header');
+            header.classList.add('visible');
+
+            const listEl = document.getElementById('results-list');
+            listEl.innerHTML = results.map((r, i) => {
+                const charCount = r.length;
+                return `<div class="result-card" style="animation-delay:${i * 0.08}s">
+          <span class="result-style-badge ${style.badgeClass}">${style.label} #${i + 1}</span>
+          <div class="result-body">${escapeHtml(r)}</div>
+          <div class="result-meta">
+            <span class="result-label">パターン ${i + 1}</span>
+            <span class="result-char ${charCount > 140 ? 'over' : ''}">${charCount}/140</span>
+          </div>
+          <div class="btn-row">
+            <button class="action-btn primary" id="rcopy-${i}" onclick="copyResult(${i}, 'rcopy-${i}')">&#128203; コピーする</button>
+            <button class="action-btn secondary" onclick="postResult(${i})" title="Xで投稿">&#120143; ポストする</button>
+          </div>
+        </div>`;
+            }).join('');
+
+            // Smooth scroll to results
+            setTimeout(() => header.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+        }
+
+        function generateVariations(text, style) {
+            const variations = [];
+
+            // Variation 1: フック + 変換テキスト
+            const hook1 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+            let v1 = applyReplaces(text, style.replaces);
+            v1 = hook1 + '\n\n' + v1;
+            if (v1.length > 140) v1 = trimToFit(v1, 140);
+            variations.push(v1);
+
+            // Variation 2: 変換テキスト + 余韻のある結び
+            const ending1 = style.endings[Math.floor(Math.random() * style.endings.length)];
+            let v2 = applyReplaces(text, style.replaces);
+            v2 = v2 + '\n\n' + ending1;
+            if (v2.length > 140) v2 = trimToFit(v2, 140);
+            variations.push(v2);
+
+            // Variation 3: フック + 変換テキスト + 結び（短い場合のみ）
+            let hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+            let ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
+            // Avoid same hook/ending as v1/v2
+            while (hook2 === hook1) hook2 = style.hooks[Math.floor(Math.random() * style.hooks.length)];
+            while (ending2 === ending1) ending2 = style.endings[Math.floor(Math.random() * style.endings.length)];
+            let v3 = applyReplaces(text, style.replaces);
+            v3 = hook2 + '\n\n' + v3 + '\n\n' + ending2;
+            if (v3.length > 140) v3 = trimToFit(v3, 140);
+            variations.push(v3);
+
+            return variations;
+        }
+
+        function applyReplaces(text, replaces) {
+            let result = text;
+            for (const [pattern, replacement] of replaces) {
+                result = result.replace(pattern, replacement);
+            }
+            return result;
+        }
+
+        function trimToFit(text, max) {
+            if (text.length <= max) return text;
+            // Try to cut at a sentence boundary
+            let cut = text.substring(0, max - 1);
+            const lastPeriod = cut.lastIndexOf('。');
+            const lastNewline = cut.lastIndexOf('\n');
+            const cutPoint = Math.max(lastPeriod, lastNewline);
+            if (cutPoint > max * 0.5) {
+                return text.substring(0, cutPoint + 1);
+            }
+            return cut + '…';
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+        }
+
+        // ===== RESULTS STORAGE (for copy/post) =====
+        function getResults() {
+            const cards = document.querySelectorAll('.result-body');
+            return Array.from(cards).map(c => c.textContent);
+        }
+
+        function copyResult(idx, btnId) {
+            const results = getResults();
+            navigator.clipboard.writeText(results[idx]).then(() => {
+                const btn = document.getElementById(btnId);
+                btn.classList.add('copied');
+                btn.innerHTML = '&#10003; コピー完了!';
+                showToast('✓ クリップボードにコピーしました');
+                setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = '&#128203; コピーする'; }, 2000);
+            });
+        }
+
+        function postResult(idx) {
+            const results = getResults();
+            const text = encodeURIComponent(results[idx]);
+            window.open('https://twitter.com/intent/tweet?text=' + text, '_blank');
+        }
+    </script>
+</body>
+
+</html>
