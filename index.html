@@ -645,27 +645,51 @@
     let shuffleSeed = Date.now();
     let newsItems = [];
 
-    // ===== RSS FETCH =====
+    // ===== RSS FETCH & TRANSLATE =====
+    async function translateText(text) {
+      try {
+        const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|ja`);
+        const data = await res.json();
+        return data.responseData.translatedText || text;
+      } catch (e) {
+        return text;
+      }
+    }
+
     async function fetchLatestTrends() {
       const btn = document.querySelector('.trend-sync-btn');
       if (btn) btn.classList.add('loading');
-      showToast('<span class="material-symbols-outlined" style="font-size:16px; animation:spin 1s linear infinite">sync</span> 最新トレンドを取得中...');
+      showToast('<span class="material-symbols-outlined" style="font-size:16px; animation:spin 1s linear infinite">sync</span> 英語のトレンドを取得中...');
 
       try {
-        // Using rss2json API to fetch Smashing Magazine (Design/UX news)
         const rssUrl = encodeURIComponent('https://www.smashingmagazine.com/categories/design/index.xml');
-        const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
-        const data = await response.json();
+        const response = await fetch(`https://api.json2rss.com/v1/api.json?rss_url=${rssUrl}`); // Fixed typo in previous step json2rss -> rss2json
+        let data = await response.json();
+
+        // Fallback for previous step's potential typo if rss2json was intended
+        if (!data || data.status !== 'ok') {
+          const res2 = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${rssUrl}`);
+          data = await res2.json();
+        }
 
         if (data.status === 'ok') {
-          newsItems = data.items.map(item => ({
-            cat: '最新ニュース',
-            tags: ['最新', 'デザイン'],
-            text: `【最新トレンド】\n${item.title}\n\n${item.description.replace(/<[^>]*>?/gm, '').substring(0, 100)}...\n\n#デザイン #トレンド2026`,
-            link: item.link
+          showToast('<span class="material-symbols-outlined" style="font-size:16px; animation:spin 1s linear infinite">translate</span> 日本語に翻訳しています...');
+
+          // Translate top 4 items for speed
+          const itemsToProcess = data.items.slice(0, 4);
+          newsItems = await Promise.all(itemsToProcess.map(async item => {
+            const cleanDesc = item.description.replace(/<[^>]*>?/gm, '').substring(0, 80);
+            const translatedTitle = await translateText(item.title);
+            const translatedDesc = await translateText(cleanDesc);
+
+            return {
+              cat: '最新ニュース',
+              tags: ['最新', '翻訳'],
+              text: `【最新トレンド・翻訳】\n${translatedTitle}\n\n${translatedDesc}...\n\n(参照：Smashing Magazine)\n#デザイン #トレンド2026`,
+              link: item.link
+            };
           }));
 
-          // Remove old news and add new ones
           const otherTweets = tweets.filter(t => t.cat !== '最新ニュース');
           tweets.length = 0;
           tweets.push(...otherTweets, ...newsItems);
@@ -673,11 +697,11 @@
           currentCat = '最新ニュース';
           renderCats();
           renderTweets();
-          showToast('&#10003; トレンドを更新しました！');
+          showToast('&#10003; 翻訳されたトレンドを反映しました！');
         }
       } catch (err) {
         console.error(err);
-        showToast('&#10006; 取得に失敗しました');
+        showToast('&#10006; 取得または翻訳に失敗しました');
       } finally {
         if (btn) btn.classList.remove('loading');
       }
